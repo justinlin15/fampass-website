@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Support — FamPass</title>
+  <meta name="description" content="Get help with FamPass. Send us feedback, report issues, or reach out with questions.">
+  <link rel="canonical" href="https://fampass.io/support.html">
+  <link rel="icon" type="image/png" href="/assets/images/logo.png?v=5">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600;1,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css?v=5">
+</head>
+<body>
+  <div id="site-header"></div>
+
+  <section class="page-header">
+    <div class="container">
+      <h1>Support</h1>
+      <p>We're here to help. Send us your feedback or questions.</p>
+    </div>
+  </section>
+
+  <section style="padding-top: 40px;">
+    <div class="container--narrow">
+
+      <!-- Contact Info -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 48px;">
+        <div class="feature-card">
+          <h3>Email Us</h3>
+          <p>For general questions or support:</p>
+          <a href="mailto:dev@fampass.io" class="btn btn--outline btn--sm" style="margin-top: 8px;">dev@fampass.io</a>
+        </div>
+        <div class="feature-card">
+          <h3>Suggest an Event</h3>
+          <p>Know about a great family event? Submit it directly in the app under More > Suggest an Event.</p>
+        </div>
+      </div>
+
+      <!-- Feedback Form -->
+      <div style="background: var(--color-surface); border-radius: var(--radius); padding: 36px; margin-bottom: 48px;">
+        <h2 style="margin-bottom: 8px;">Send Feedback</h2>
+        <p>Help us make FamPass better. We read every message.</p>
+
+        <form id="feedbackForm" style="margin-top: 24px;">
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" placeholder="Your name" required>
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="you@example.com" required>
+          </div>
+          <div class="form-group">
+            <label for="message">Message</label>
+            <textarea id="message" name="message" placeholder="Tell us what's on your mind — bug reports, feature requests, or just say hi!" rows="5" required></textarea>
+          </div>
+          <button type="submit" class="btn btn--primary">Send Feedback</button>
+          <div id="feedbackMessage" class="form-message"></div>
+        </form>
+      </div>
+
+      <!-- FAQ -->
+      <h2 style="margin-bottom: 24px;">Common Questions</h2>
+      <div class="faq__list" style="margin-bottom: 48px;">
+        <details class="faq__item">
+          <summary>How do I reset my subscription?</summary>
+          <p>Subscriptions are managed through your Apple ID. Go to Settings > Apple ID > Subscriptions to manage or cancel your FamPass subscription.</p>
+        </details>
+        <details class="faq__item">
+          <summary>Events aren't loading. What should I do?</summary>
+          <p>Make sure you have an internet connection. Try closing and reopening the app. If the issue persists, email us at dev@fampass.io with your device model and iOS version.</p>
+        </details>
+        <details class="faq__item">
+          <summary>I found incorrect event information.</summary>
+          <p>We aggregate from many sources and sometimes details change. Please let us know through the feedback form above and we'll correct it.</p>
+        </details>
+        <details class="faq__item">
+          <summary>How do I delete my account?</summary>
+          <p>You can request account deletion by emailing dev@fampass.io. We'll remove your data within 30 days as required by Apple's guidelines.</p>
+        </details>
+      </div>
+
+    </div>
+  </section>
+
+  <div id="site-footer"></div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script src="/js/firebase-config.js"></script>
+  <script src="/js/nav.js?v=5"></script>
+  <script src="/js/feedback.js"></script>
+</body>
+</html>

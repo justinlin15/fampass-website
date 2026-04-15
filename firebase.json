@@ -1,0 +1,57 @@
+{
+  "hosting": {
+    "site": "fampass-3bb49",
+    "public": ".",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "node_modules/**"
+    ],
+    "redirects": [
+      {
+        "source": "/blog/:slug*",
+        "destination": "/resources/:slug*",
+        "type": 301
+      }
+    ],
+    "rewrites": [
+      {
+        "source": "/resources/**",
+        "destination": "/resources/index.html"
+      }
+    ],
+    "headers": [
+      {
+        "source": "**/*.html",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-cache"
+          }
+        ]
+      },
+      {
+        "source": "**/*.@(css|js)",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=3600"
+          }
+        ]
+      },
+      {
+        "source": "**/*.@(png|jpg|jpeg|gif|svg|webp|ico)",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=86400"
+          }
+        ]
+      }
+    ]
+  },
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  }
+}

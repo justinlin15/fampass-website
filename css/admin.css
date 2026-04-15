@@ -1,0 +1,288 @@
+/* ============================================
+   FAM Pass — Admin Panel Styles
+   ============================================ */
+
+.admin-login {
+  max-width: 400px;
+  margin: 100px auto;
+  padding: 40px;
+  background: var(--color-surface);
+  border-radius: var(--radius);
+  text-align: center;
+}
+
+.admin-login h1 {
+  margin-bottom: 8px;
+}
+
+.admin-login p {
+  margin-bottom: 24px;
+}
+
+/* --- Dashboard --- */
+.admin-dashboard {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.admin-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 32px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.admin-header h1 {
+  font-size: var(--font-size-xl);
+}
+
+.admin-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 24px;
+  border-bottom: 2px solid var(--color-border);
+}
+
+.admin-tab {
+  padding: 12px 20px;
+  background: none;
+  border: none;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-text-light);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  transition: all var(--transition);
+}
+
+.admin-tab:hover {
+  color: var(--color-text);
+}
+
+.admin-tab--active {
+  color: var(--color-primary);
+  border-bottom-color: var(--color-primary);
+}
+
+.admin-panel {
+  display: none;
+}
+
+.admin-panel--active {
+  display: block;
+}
+
+/* --- Blog Editor --- */
+.admin-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.admin-posts-list {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.admin-post-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--color-border);
+  transition: background var(--transition);
+}
+
+.admin-post-row:last-child {
+  border-bottom: none;
+}
+
+.admin-post-row:hover {
+  background: var(--color-surface);
+}
+
+.admin-post-row__info {
+  flex: 1;
+}
+
+.admin-post-row__title {
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.admin-post-row__meta {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-light);
+}
+
+.admin-post-row__actions {
+  display: flex;
+  gap: 8px;
+}
+
+.admin-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.admin-badge--published {
+  background: rgba(124, 182, 154, 0.2);
+  color: #3d7a5a;
+}
+
+.admin-badge--draft {
+  background: rgba(224, 169, 109, 0.2);
+  color: #a06a2a;
+}
+
+/* --- Editor Form --- */
+.editor-form {
+  display: none;
+}
+
+.editor-form--active {
+  display: block;
+}
+
+.editor-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.editor-grid--full {
+  grid-column: 1 / -1;
+}
+
+.editor-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.editor-content textarea {
+  min-height: 400px;
+  font-family: "SF Mono", "Menlo", "Monaco", monospace;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.editor-preview {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 16px;
+  overflow-y: auto;
+  max-height: 500px;
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.editor-preview h1, .editor-preview h2, .editor-preview h3 {
+  margin-top: 16px;
+  margin-bottom: 8px;
+}
+
+.editor-preview p { margin-bottom: 12px; }
+.editor-preview ul, .editor-preview ol { padding-left: 24px; list-style: disc; margin-bottom: 12px; }
+.editor-preview ol { list-style: decimal; }
+.editor-preview blockquote { border-left: 3px solid var(--color-primary-light); padding: 8px 16px; margin: 12px 0; background: var(--color-surface); }
+
+.editor-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--color-border);
+}
+
+/* --- Feedback --- */
+.feedback-list {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.feedback-row {
+  padding: 16px;
+  border-bottom: 1px solid var(--color-border);
+  transition: background var(--transition);
+}
+
+.feedback-row:last-child {
+  border-bottom: none;
+}
+
+.feedback-row--unread {
+  background: rgba(212, 114, 126, 0.05);
+  border-left: 3px solid var(--color-primary);
+}
+
+.feedback-row__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.feedback-row__name {
+  font-weight: 600;
+}
+
+.feedback-row__email {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-light);
+}
+
+.feedback-row__date {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-light);
+}
+
+.feedback-row__message {
+  font-size: var(--font-size-sm);
+  line-height: 1.6;
+  color: var(--color-text);
+  margin-bottom: 8px;
+}
+
+.feedback-row__actions {
+  display: flex;
+  gap: 8px;
+}
+
+.feedback-empty {
+  text-align: center;
+  padding: 60px 24px;
+  color: var(--color-text-light);
+}
+
+/* --- Checkbox --- */
+.checkbox-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.checkbox-group input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--color-primary);
+}
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+  .editor-grid { grid-template-columns: 1fr; }
+  .editor-content { grid-template-columns: 1fr; }
+  .admin-header { flex-direction: column; gap: 12px; align-items: flex-start; }
+  .admin-post-row { flex-direction: column; align-items: flex-start; gap: 8px; }
+}

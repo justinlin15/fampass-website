@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resources — FAM Pass</title>
+  <meta name="description" content="Tips, guides, and updates for families in Orange County and Los Angeles. Discover the best things to do with your kids.">
+  <link rel="canonical" href="https://fampass.io/resources/">
+  <link rel="icon" type="image/png" href="/assets/images/logo.png?v=5">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600;1,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css?v=5">
+  <link rel="stylesheet" href="/css/blog.css">
+</head>
+<body>
+  <div id="site-header"></div>
+
+  <!-- Resources Listing (shown when no slug) -->
+  <div id="blogListing">
+    <section class="page-header">
+      <div class="container">
+        <h1>Resources</h1>
+        <p>Tips, guides, and local finds for families.</p>
+      </div>
+    </section>
+    <section style="padding-top: 20px;">
+      <div class="container">
+        <div class="blog-grid" id="blogGrid"></div>
+        <div class="blog-load-more" id="loadMore" style="display: none;">
+          <button class="btn btn--outline" id="loadMoreBtn">Load More</button>
+        </div>
+        <div class="blog-empty" id="blogEmpty" style="display: none;">
+          <div class="blog-empty__icon">&#128221;</div>
+          <h3>No posts yet</h3>
+          <p>Check back soon for tips, guides, and updates for families.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Post Detail (shown when slug present) -->
+  <div id="blogPost" style="display: none;">
+    <div class="blog-post">
+      <a href="/resources/" class="blog-post__back">&larr; Back to Resources</a>
+      <div class="blog-post__header">
+        <div class="blog-post__tags" id="postTags"></div>
+        <h1 class="blog-post__title" id="postTitle"></h1>
+        <div class="blog-post__meta" id="postMeta"></div>
+      </div>
+      <img id="postCover" class="blog-post__cover" style="display: none;">
+      <div class="blog-post__content" id="postContent"></div>
+    </div>
+  </div>
+
+  <div id="site-footer"></div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <!-- Markdown rendering -->
+  <script src="https://cdn.jsdelivr.net/npm/marked@12.0.0/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.8/dist/purify.min.js"></script>
+  <script src="/js/firebase-config.js"></script>
+  <script src="/js/nav.js?v=5"></script>
+  <script src="/js/blog.js?v=2"></script>
+</body>
+</html>

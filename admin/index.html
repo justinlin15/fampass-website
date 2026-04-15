@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin — FAM Pass</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" type="image/png" href="/assets/images/logo.png?v=5">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600;1,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css?v=5">
+  <link rel="stylesheet" href="/css/blog.css">
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+  <div id="site-header"></div>
+
+  <!-- Login -->
+  <div id="loginPanel" class="admin-login" style="display: none;">
+    <h1>Admin Login</h1>
+    <p>Sign in to manage your resources and feedback.</p>
+    <form id="loginForm">
+      <div class="form-group">
+        <label for="loginEmail">Email</label>
+        <input type="email" id="loginEmail" required>
+      </div>
+      <div class="form-group">
+        <label for="loginPassword">Password</label>
+        <input type="password" id="loginPassword" required>
+      </div>
+      <button type="submit" class="btn btn--primary" style="width: 100%;">Sign In</button>
+      <div id="loginError" class="form-message" style="margin-top: 12px;"></div>
+    </form>
+  </div>
+
+  <!-- Dashboard -->
+  <div id="dashboardPanel" style="display: none;">
+    <div class="admin-dashboard">
+      <div class="admin-header">
+        <h1>Admin Dashboard</h1>
+        <button class="btn btn--outline btn--sm" id="logoutBtn">Sign Out</button>
+      </div>
+
+      <div class="admin-tabs">
+        <button class="admin-tab admin-tab--active" data-tab="posts">Resources</button>
+        <button class="admin-tab" data-tab="feedback">Feedback</button>
+      </div>
+
+      <!-- Resources Panel -->
+      <div class="admin-panel admin-panel--active" id="panel-posts">
+        <div class="admin-toolbar">
+          <h2 id="postsHeading">Posts</h2>
+          <button class="btn btn--primary btn--sm" id="newPostBtn">New Post</button>
+        </div>
+
+        <div id="postsList" class="admin-posts-list"></div>
+
+        <!-- Editor -->
+        <div id="editorForm" class="editor-form">
+          <h2 id="editorTitle">New Post</h2>
+          <form id="postForm">
+            <div class="editor-grid">
+              <div class="form-group">
+                <label for="postTitleInput">Title</label>
+                <input type="text" id="postTitleInput" required placeholder="Your post title">
+              </div>
+              <div class="form-group">
+                <label for="postSlugInput">Slug</label>
+                <input type="text" id="postSlugInput" required placeholder="your-post-slug" pattern="[a-z0-9\-]+">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="postExcerpt">Excerpt</label>
+              <input type="text" id="postExcerpt" placeholder="Brief summary for listing cards and SEO">
+            </div>
+            <div class="editor-grid">
+              <div class="form-group">
+                <label for="postTags">Tags (comma-separated)</label>
+                <input type="text" id="postTags" placeholder="Family Fun, Orange County, Tips">
+              </div>
+              <div class="form-group">
+                <label for="postCoverImage">Cover Image URL</label>
+                <input type="url" id="postCoverImage" placeholder="https://...">
+              </div>
+            </div>
+            <div class="editor-grid">
+              <div class="form-group">
+                <label for="postAuthor">Author</label>
+                <input type="text" id="postAuthor" placeholder="Author name" value="FAM Pass">
+              </div>
+              <div class="form-group">
+                <div class="checkbox-group" style="margin-top: 28px;">
+                  <input type="checkbox" id="postPublished">
+                  <label for="postPublished" style="margin-bottom: 0;">Published</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="editor-content">
+              <div class="form-group" style="margin-bottom: 0;">
+                <label for="postContentInput">Content (Markdown)</label>
+                <textarea id="postContentInput" placeholder="Write your post in Markdown..." required></textarea>
+              </div>
+              <div>
+                <label>Preview</label>
+                <div class="editor-preview" id="editorPreview">
+                  <p style="color: var(--color-text-light); font-style: italic;">Start typing to see preview...</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="editor-actions">
+              <button type="submit" class="btn btn--primary" id="savePostBtn">Save Post</button>
+              <button type="button" class="btn btn--outline" id="cancelEditBtn">Cancel</button>
+              <button type="button" class="btn btn--sm" id="deletePostBtn" style="margin-left: auto; color: var(--color-error); border: 1px solid var(--color-error); background: none; display: none;">Delete</button>
+            </div>
+            <input type="hidden" id="editingPostId">
+          </form>
+        </div>
+      </div>
+
+      <!-- Feedback Panel -->
+      <div class="admin-panel" id="panel-feedback">
+        <h2>Feedback Submissions</h2>
+        <div id="feedbackList" class="feedback-list" style="margin-top: 20px;"></div>
+        <div id="feedbackEmpty" class="feedback-empty" style="display: none;">
+          <p>No feedback submissions yet.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="site-footer"></div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <!-- Markdown -->
+  <script src="https://cdn.jsdelivr.net/npm/marked@12.0.0/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.8/dist/purify.min.js"></script>
+  <script src="/js/firebase-config.js"></script>
+  <script src="/js/nav.js?v=5"></script>
+  <script src="/js/admin.js"></script>
+</body>
+</html>
