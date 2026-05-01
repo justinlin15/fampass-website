@@ -1,7 +1,7 @@
 {
   "hosting": {
     "site": "fampass-3bb49",
-    "public": ".",
+    "public": "dist",
     "ignore": [
       "firebase.json",
       "**/.*",
