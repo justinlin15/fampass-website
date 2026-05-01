@@ -1,0 +1,199 @@
+---
+const free = [
+  'Today\'s events with full details',
+  'Map view with distance filter',
+  'Curated places & guides',
+  'Filter by age, category, price',
+  'Save up to 5 events',
+];
+const freeLocked = [
+  'Full calendar weeks ahead',
+  'Calendar sync',
+  'Ad-free experience',
+];
+const premium = [
+  'Everything in Free',
+  'Full event details, weeks ahead',
+  'One-tap calendar sync',
+  'Unlimited saves',
+  'Personalized weekly digest',
+  'Ad-free, forever',
+  'Priority support',
+];
+---
+<section class="pricing section" id="pricing">
+  <div class="container">
+    <div class="section__head">
+      <span class="eyebrow">Pricing</span>
+      <h2>Free is genuinely free.</h2>
+      <p>Premium unlocks the things power-planners ask for.</p>
+    </div>
+
+    <div class="pricing__grid">
+      <article class="plan">
+        <header class="plan__head">
+          <h3 class="plan__name">Free</h3>
+          <p class="plan__sub">Forever free. No card needed.</p>
+        </header>
+        <div class="plan__price">
+          <span class="plan__amount">$0</span>
+          <span class="plan__period">/month</span>
+        </div>
+        <a href="https://apps.apple.com/app/fampass/id0000000000" class="btn btn--ghost plan__cta" target="_blank" rel="noopener">
+          Get FamPass
+        </a>
+        <ul class="plan__features">
+          {free.map(f => <li class="check"><span class="i">✓</span>{f}</li>)}
+          {freeLocked.map(f => <li class="cross muted"><span class="i">—</span>{f}</li>)}
+        </ul>
+      </article>
+
+      <article class="plan plan--featured">
+        <header class="plan__head">
+          <h3 class="plan__name">Premium</h3>
+          <p class="plan__sub">Unlock the planning superpowers.</p>
+        </header>
+        <div class="plan__price">
+          <span class="plan__amount">$4</span>
+          <span class="plan__period">/month</span>
+        </div>
+        <p class="plan__yearly">Billed annually as $48 — save 50%</p>
+        <p class="plan__monthly">or $8/month billed monthly</p>
+        <a href="https://apps.apple.com/app/fampass/id0000000000" class="btn btn--accent plan__cta" target="_blank" rel="noopener">
+          Start 7-day free trial
+        </a>
+        <ul class="plan__features">
+          {premium.map(f => <li class="check"><span class="i">✓</span>{f}</li>)}
+        </ul>
+      </article>
+    </div>
+
+    <p class="pricing__note">Cancel anytime in Settings. No surprise renewals.</p>
+  </div>
+</section>
+
+<style>
+  .pricing__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    max-width: 920px;
+    margin-inline: auto;
+  }
+  .plan {
+    background: #fff;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-lg);
+    padding: 36px 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    position: relative;
+  }
+  .plan--featured {
+    border-color: var(--color-ink);
+    box-shadow: var(--shadow-card);
+  }
+  .plan__badge {
+    position: absolute;
+    top: -12px;
+    right: 24px;
+    background: var(--color-ink);
+    color: #fff;
+    font-size: 0.78rem;
+    font-weight: 600;
+    padding: 5px 12px;
+    border-radius: var(--radius-pill);
+    letter-spacing: 0.02em;
+  }
+  .plan__head { margin-bottom: 4px; }
+  .plan__name {
+    font-family: var(--font-serif);
+    font-size: 1.6rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .plan__sub {
+    color: var(--color-ink-muted);
+    font-size: 0.92rem;
+  }
+
+  .plan__price {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    margin-block: 4px;
+  }
+  .plan__amount {
+    font-family: var(--font-serif);
+    font-size: 3rem;
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    color: var(--color-ink);
+  }
+  .plan__period { color: var(--color-ink-muted); font-size: 1rem; }
+  .plan__yearly {
+    font-size: 0.88rem;
+    color: var(--color-ink);
+    font-weight: 500;
+    margin-top: -4px;
+  }
+  .plan__monthly {
+    font-size: 0.84rem;
+    color: var(--color-ink-muted);
+    margin-top: -10px;
+  }
+
+  .plan__cta {
+    margin-top: 8px;
+    width: 100%;
+  }
+
+  .plan__features {
+    margin-top: 14px;
+    padding-top: 18px;
+    border-top: 1px solid var(--color-line-soft);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    font-size: 0.96rem;
+    color: var(--color-ink);
+  }
+  .plan__features li {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    line-height: 1.45;
+  }
+  .plan__features .i {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .plan__features .check .i {
+    background: var(--color-accent-lo);
+    color: var(--color-accent-hi);
+  }
+  .plan__features .cross .i {
+    background: rgba(0,0,0,.04);
+    color: var(--color-ink-muted);
+  }
+
+  .pricing__note {
+    text-align: center;
+    margin-top: 32px;
+    font-size: 0.9rem;
+    color: var(--color-ink-muted);
+  }
+
+  @media (max-width: 720px) {
+    .pricing__grid { grid-template-columns: 1fr; }
+  }
+</style>

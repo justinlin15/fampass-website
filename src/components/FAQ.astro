@@ -1,0 +1,132 @@
+---
+const faqs = [
+  {
+    q: 'Is FamPass really free?',
+    a: 'Yes — completely free to download and use. The free tier shows today\'s events with full details, gives you the map view, and lets you explore curated guides. Premium ($3.99/month) unlocks the full event calendar weeks ahead, adds calendar sync, unlimited saves, and removes ads.',
+  },
+  {
+    q: 'Where do the events come from?',
+    a: 'We aggregate from 30+ trusted sources twice a day: city libraries, parks & recreation departments, museums, ticketing platforms (Eventbrite, Ticketmaster), local venues, and curated community sources. Every listing credits its origin, and the feed refreshes every twelve hours so it stays current.',
+  },
+  {
+    q: 'How do you make sure events are family-friendly?',
+    a: 'Two layers: a content filter screens out adult-only listings, 21+ shows, bar crawls, and anything explicitly age-restricted. Then a human reviewer audits flagged or ambiguous events weekly. If something slips through, you can flag it in the app — we\'ll review within 24 hours.',
+  },
+  {
+    q: 'What areas do you cover?',
+    a: 'Today: Orange County and Los Angeles, including Irvine, Anaheim, Santa Monica, Pasadena, Long Beach, and dozens more. We\'re actively expanding — sign up in the app to get notified when we launch in your city, and tell us where you\'d like us next.',
+  },
+  {
+    q: 'Can I see events more than a week out?',
+    a: 'On Free, you can browse all listings but see full details only for events happening today. Premium unlocks full details for every event, weeks ahead, plus calendar sync so a class series shows up on your family calendar with one tap.',
+  },
+  {
+    q: 'Can I suggest an event or correct a listing?',
+    a: 'Yes — there\'s a "Suggest an Event" form in the app\'s More menu, and any listing has a "Report an issue" link. Submissions go to a real person and most are reviewed within 24 hours. Recurring events (a weekly storytime, a class series) are especially welcome.',
+  },
+  {
+    q: 'Will FamPass come to Android?',
+    a: 'It\'s on the roadmap. iOS launched first because it lets us iterate faster as a small team. Drop your email in the footer and we\'ll let you know the moment Android is ready.',
+  },
+  {
+    q: 'How do I cancel Premium?',
+    a: 'Through your Apple ID: Settings → your name → Subscriptions → FamPass → Cancel. You\'ll keep Premium access until the end of your current billing period. No hoops, no retention scripts.',
+  },
+];
+---
+<section class="faq section section--warm" id="faq">
+  <div class="container container--narrow">
+    <div class="section__head">
+      <span class="eyebrow">Frequently asked</span>
+      <h2>Questions parents actually ask.</h2>
+    </div>
+
+    <div class="faq__list">
+      {faqs.map(item => (
+        <details class="faq__item">
+          <summary>
+            <span>{item.q}</span>
+            <span class="faq__icon" aria-hidden="true">
+              <svg viewBox="0 0 16 16" width="14" height="14"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+          </summary>
+          <p>{item.a}</p>
+        </details>
+      ))}
+    </div>
+
+    <div class="faq__more">
+      <p>Still have questions?</p>
+      <a href="/support.html" class="btn btn--ghost btn--sm">Contact support</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .faq__list {
+    background: #fff;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+  .faq__item { border-bottom: 1px solid var(--color-line-soft); }
+  .faq__item:last-child { border-bottom: 0; }
+
+  .faq__item summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 22px 28px;
+    font-weight: 500;
+    font-size: 1.04rem;
+    color: var(--color-ink);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    transition: background .12s ease;
+  }
+  .faq__item summary::-webkit-details-marker { display: none; }
+  .faq__item summary:hover { background: var(--color-bg-warm); }
+
+  .faq__icon {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: var(--color-bg-warm);
+    color: var(--color-ink);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: transform .2s ease, background .12s ease, color .12s ease;
+  }
+  .faq__item[open] .faq__icon {
+    transform: rotate(180deg);
+    background: var(--color-accent);
+    color: #fff;
+  }
+
+  .faq__item p {
+    padding: 0 28px 24px;
+    color: var(--color-ink-soft);
+    line-height: 1.6;
+    max-width: 70ch;
+  }
+
+  .faq__more {
+    text-align: center;
+    margin-top: 36px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+  }
+  .faq__more p {
+    color: var(--color-ink-muted);
+    font-size: 0.95rem;
+  }
+
+  @media (max-width: 600px) {
+    .faq__item summary { padding: 18px 20px; font-size: 1rem; }
+    .faq__item p { padding: 0 20px 20px; }
+  }
+</style>

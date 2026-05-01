@@ -1,0 +1,255 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import CTAStrip from '../components/CTAStrip.astro';
+---
+<Base
+  title="Resources — FamPass"
+  description="Tips, guides, and local finds for parents. Smart ways to find things to do with kids — from rainy-day rescues to weekend planning."
+  canonical="https://fampass.io/resources/"
+>
+  <!-- Listing view -->
+  <div id="blogListing">
+    <PageHero
+      eyebrow="Resources"
+      title="The parent playbook."
+      lede="Tips, guides, and local finds — written by parents, for parents. Bookmark the rainy-day list. Subscribe for the weekend digest."
+    />
+
+    <section class="section" style="padding-top: clamp(24px, 3vw, 40px);">
+      <div class="container">
+        <div class="blog-grid" id="blogGrid"></div>
+        <div class="blog-load-more" id="loadMore" style="display: none;">
+          <button class="btn btn--ghost" id="loadMoreBtn">Load more posts</button>
+        </div>
+        <div class="blog-empty" id="blogEmpty" style="display: none;">
+          <div class="blog-empty__icon" aria-hidden="true">📝</div>
+          <h3>No posts yet</h3>
+          <p>We're cooking some up. Check back soon for tips, guides, and updates for families.</p>
+        </div>
+      </div>
+    </section>
+
+    <CTAStrip
+      title="Hate planning weekends? We do, too."
+      body="FamPass does the hunting so you don't have to. Free to download, free to start."
+    />
+  </div>
+
+  <!-- Post detail view -->
+  <div id="blogPost" style="display: none;">
+    <article class="blog-post">
+      <div class="container container--narrow">
+        <a href="/resources/" class="blog-post__back">
+          <svg viewBox="0 0 16 16" width="14" height="14" fill="none"><path d="M10 4l-4 4 4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Back to Resources
+        </a>
+        <header class="blog-post__header">
+          <div class="blog-post__tags" id="postTags"></div>
+          <h1 class="blog-post__title" id="postTitle"></h1>
+          <div class="blog-post__meta" id="postMeta"></div>
+        </header>
+        <img id="postCover" class="blog-post__cover" alt="" style="display: none;" />
+        <div class="blog-post__content prose" id="postContent"></div>
+      </div>
+    </article>
+  </div>
+
+  <!-- Firebase + markdown rendering -->
+  <script is:inline src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script is:inline src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script is:inline src="https://cdn.jsdelivr.net/npm/marked@12.0.0/marked.min.js"></script>
+  <script is:inline src="https://cdn.jsdelivr.net/npm/dompurify@3.0.8/dist/purify.min.js"></script>
+  <script is:inline src="/js/firebase-config.js"></script>
+  <script is:inline src="/js/blog.js?v=3"></script>
+</Base>
+
+<style is:global>
+  /* listing grid */
+  .blog-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 28px;
+    margin-top: 8px;
+  }
+
+  .blog-card {
+    background: #fff;
+    border: 1px solid var(--color-line-soft);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--shadow-sm);
+    transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+  }
+  .blog-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-card);
+    border-color: var(--color-line);
+  }
+
+  .blog-card__image {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    background: var(--color-bg-warm);
+    display: block;
+  }
+  .blog-card__image--placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    color: var(--color-accent-hi);
+    background: linear-gradient(160deg, var(--color-accent-lo), var(--color-bg-warm));
+  }
+
+  .blog-card__body {
+    padding: 22px 24px 26px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex-grow: 1;
+  }
+
+  .blog-card__tags {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 4px;
+  }
+  .blog-tag {
+    background: var(--color-accent-lo);
+    color: var(--color-accent-hi);
+    padding: 4px 10px;
+    border-radius: var(--radius-pill);
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .blog-card__title {
+    font-family: var(--font-serif);
+    font-size: 1.3rem;
+    line-height: 1.25;
+    font-weight: 600;
+    color: var(--color-ink);
+    letter-spacing: -0.015em;
+    margin: 0;
+  }
+  .blog-card__excerpt {
+    font-size: 0.96rem;
+    color: var(--color-ink-soft);
+    line-height: 1.5;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .blog-card__meta {
+    margin-top: auto;
+    padding-top: 12px;
+    font-size: 0.82rem;
+    color: var(--color-ink-muted);
+    letter-spacing: 0.01em;
+  }
+
+  /* empty state */
+  .blog-empty {
+    text-align: center;
+    padding: 80px 24px;
+    color: var(--color-ink-muted);
+    background: var(--color-bg-warm);
+    border-radius: var(--radius-lg);
+  }
+  .blog-empty__icon {
+    font-size: 40px;
+    margin-bottom: 16px;
+    opacity: 0.7;
+  }
+  .blog-empty h3 {
+    color: var(--color-ink);
+    font-family: var(--font-serif);
+    margin-bottom: 8px;
+  }
+
+  /* load more */
+  .blog-load-more {
+    text-align: center;
+    margin-top: 48px;
+  }
+
+  /* --- Post detail --- */
+  .blog-post {
+    padding-block: clamp(48px, 6vw, 80px);
+  }
+  .blog-post__back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.92rem;
+    color: var(--color-ink-muted);
+    margin-bottom: 32px;
+    transition: color .15s ease;
+  }
+  .blog-post__back:hover { color: var(--color-accent); }
+
+  .blog-post__header { margin-bottom: 32px; }
+  .blog-post__tags {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+  }
+  .blog-post__title {
+    font-family: var(--font-serif);
+    font-size: clamp(2rem, 3vw + .5rem, 3rem);
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--color-ink);
+    margin-bottom: 14px;
+  }
+  .blog-post__meta {
+    font-size: 0.92rem;
+    color: var(--color-ink-muted);
+  }
+  .blog-post__cover {
+    width: 100%;
+    border-radius: var(--radius-lg);
+    margin-bottom: 36px;
+    max-height: 480px;
+    object-fit: cover;
+    box-shadow: var(--shadow-card);
+  }
+
+  /* prose styling already applied via .prose class */
+  .blog-post__content code {
+    background: var(--color-bg-warm);
+    padding: 2px 7px;
+    border-radius: 5px;
+    font-size: 0.92em;
+    font-family: ui-monospace, 'SF Mono', monospace;
+  }
+  .blog-post__content pre {
+    background: var(--color-ink);
+    color: #fff;
+    padding: 22px;
+    border-radius: var(--radius-md);
+    overflow-x: auto;
+    margin: 1.5em 0;
+    font-family: ui-monospace, 'SF Mono', monospace;
+    font-size: 0.94rem;
+    line-height: 1.6;
+  }
+  .blog-post__content pre code { background: none; padding: 0; color: inherit; }
+
+  @media (max-width: 720px) {
+    .blog-card__image { height: 180px; }
+  }
+</style>

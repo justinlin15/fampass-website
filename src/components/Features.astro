@@ -1,0 +1,137 @@
+---
+const features = [
+  {
+    title: 'Everything in one feed',
+    proof: '1,500+ activities',
+    body: 'Library storytimes, soccer leagues, art classes, museum days, weekend festivals — every category, every age range, in a single searchable feed.',
+    img: '/assets/images/app-feed.png',
+    kind: 'screenshot',
+  },
+  {
+    title: 'Updated twice a day',
+    proof: 'Refreshed 2× daily',
+    body: 'Listings are refreshed from 30+ trusted sources every twelve hours. No stale calendars, no last-year leftovers, no broken links.',
+    img: 'https://images.unsplash.com/photo-1518806118471-f28b20a1d79d?w=900&q=80&auto=format&fit=crop&crop=faces,edges',
+  },
+  {
+    title: 'Map view + smart filters',
+    proof: 'Filter by age, distance, price',
+    body: 'See what\'s within five miles, this weekend, free, and right for a four-year-old — all in two taps. No more spreadsheet planning.',
+    img: '/assets/images/app-map.png',
+    kind: 'screenshot',
+  },
+  {
+    title: 'Family-friendly, screened',
+    proof: 'Multi-layer filtering',
+    body: 'Every event passes through a content filter that strips out 21+ shows, bar crawls, and adult-only listings. Then a human reviews flagged items.',
+    img: 'https://images.pexels.com/photos/18242982/pexels-photo-18242982.jpeg?auto=compress&cs=tinysrgb&w=1200',
+  },
+  {
+    title: 'One-tap calendar sync',
+    proof: 'iOS / Google calendars',
+    body: 'Save a class series or a festival straight to your family calendar. Reminders, locations, and links carry over automatically.',
+    img: '/assets/images/app-calendar.png',
+    kind: 'screenshot',
+  },
+  {
+    title: 'Curated places, not just events',
+    proof: '1,100+ guides',
+    body: 'Beyond events: hand-picked playgrounds, kid-friendly restaurants, indoor rainy-day spots, and family hikes — reviewed and categorized.',
+    img: 'https://images.pexels.com/photos/8382625/pexels-photo-8382625.jpeg?auto=compress&cs=tinysrgb&w=1200',
+  },
+];
+---
+<section class="features section" id="features">
+  <div class="container">
+    <div class="section__head">
+      <span class="eyebrow">Built for the way parents actually plan</span>
+      <h2>Everything you need. Nothing you don't.</h2>
+      <p>Six things FamPass does that no Google search can match.</p>
+    </div>
+
+    <div class="features__grid">
+      {features.map(f => (
+        <article class={`feature ${f.kind === 'screenshot' ? 'feature--screenshot' : ''}`}>
+          <div class="feature__media">
+            <img src={f.img} alt="" loading="lazy" />
+          </div>
+          <div class="feature__body">
+            <span class="pill">{f.proof}</span>
+            <h3>{f.title}</h3>
+            <p>{f.body}</p>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .features__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+  }
+  .feature {
+    background: #fff;
+    border: 1px solid var(--color-line-soft);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+  }
+  .feature:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-card);
+    border-color: var(--color-line);
+  }
+  .feature__media {
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: var(--color-bg-warm);
+  }
+  .feature__media img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform .4s ease;
+  }
+  .feature:hover .feature__media img { transform: scale(1.04); }
+
+  /* phone screenshot variant — keeps full image visible, no cropping */
+  .feature--screenshot .feature__media {
+    background: linear-gradient(160deg, #FCE9E1 0%, #FAF6F1 100%);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 20px 20px 0;
+  }
+  .feature--screenshot .feature__media img {
+    width: auto;
+    max-width: 70%;
+    height: 100%;
+    object-fit: contain;
+    object-position: top center;
+    border-radius: 18px 18px 0 0;
+    box-shadow: 0 12px 28px -8px rgba(0,0,0,.15);
+    transition: transform .4s ease;
+  }
+  .feature--screenshot:hover .feature__media img { transform: translateY(-4px) scale(1.02); }
+
+  .feature__body {
+    padding: 24px 24px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .feature__body h3 { letter-spacing: -0.01em; }
+  .feature__body p { color: var(--color-ink-soft); }
+
+  @media (max-width: 980px) {
+    .features__grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 640px) {
+    .features__grid { grid-template-columns: 1fr; }
+  }
+</style>

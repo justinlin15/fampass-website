@@ -16,8 +16,12 @@
     ],
     "rewrites": [
       {
+        "source": "/resources",
+        "destination": "/resources.html"
+      },
+      {
         "source": "/resources/**",
-        "destination": "/resources/index.html"
+        "destination": "/resources.html"
       }
     ],
     "headers": [

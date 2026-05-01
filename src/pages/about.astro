@@ -1,0 +1,195 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import CTAStrip from '../components/CTAStrip.astro';
+
+const principles = [
+  {
+    title: 'Family-first, always',
+    body: 'Every listing passes through a content filter and human review. If it isn\'t safe for kids, it doesn\'t make the feed.',
+  },
+  {
+    title: 'Honest sourcing',
+    body: 'We credit every event\'s source. We don\'t pretend to know what we don\'t, and we don\'t pad the feed with things we\'d skip ourselves.',
+  },
+  {
+    title: 'No data resold',
+    body: 'We don\'t sell your location, your kids\' ages, your saves, or your search history. Premium revenue is how we keep the lights on.',
+  },
+  {
+    title: 'Locally curated',
+    body: 'Algorithms gather. Humans decide. A real person reviews what gets featured and what gets flagged.',
+  },
+];
+
+const heroImg = 'https://images.pexels.com/photos/8208286/pexels-photo-8208286.jpeg?auto=compress&cs=tinysrgb&w=1600';
+---
+<Base
+  title="About — FamPass"
+  description="FamPass is the local guide every parent wishes they had. Built by parents, for parents — discover library storytimes, weekend festivals, museum days, and more in one app."
+  canonical="https://fampass.io/about.html"
+>
+  <PageHero
+    eyebrow="About FamPass"
+    title="We were tired of Googling, too."
+    lede="So we built the local guide we'd actually use ourselves. Every Saturday morning. Every rainy afternoon. Every long-weekend, what-should-we-do scramble."
+  />
+
+  <section class="section">
+    <div class="container">
+      <div class="about-story">
+        <div class="about-story__copy">
+          <span class="eyebrow">The story</span>
+          <h2 class="mt-4">Started in a kitchen. Not a pitch deck.</h2>
+
+          <p class="mt-4 lede">
+            FamPass began because two parents got tired of the same routine: Friday night,
+            kids finally asleep, and a string of browser tabs across library calendars,
+            museum sites, parks-and-rec PDFs from 2019, and one Instagram post a friend
+            had screenshotted from somewhere.
+          </p>
+
+          <p class="mt-4">
+            We wanted one app that pulled it all together — honestly, without the marketing
+            fluff, without the SEO-spam blog posts, without the pop-ups for newsletters
+            we'd never read. Just: here's what's happening for kids near you. With dates.
+            With directions. With actual age recommendations.
+          </p>
+
+          <p class="mt-4">
+            We started with our own neighborhoods. Library storytimes. The weekly farmers
+            market. Open houses at the children's museum. Festivals we kept missing because
+            we found out the day after. Then we added another city. Then another. We're
+            still adding.
+          </p>
+
+          <p class="mt-4">
+            FamPass is built by parents, for parents. We use it ourselves, every weekend.
+            The whole point is to spend less time researching and more time showing up.
+          </p>
+        </div>
+
+        <div class="about-story__media">
+          <img src={heroImg} alt="Family enjoying time together outdoors" loading="lazy" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--warm">
+    <div class="container">
+      <div class="section__head">
+        <span class="eyebrow">What we believe</span>
+        <h2>Four principles. No compromises.</h2>
+        <p>We hold ourselves to these even when nobody's watching.</p>
+      </div>
+
+      <div class="principles">
+        {principles.map(p => (
+          <article class="principle">
+            <h3>{p.title}</h3>
+            <p>{p.body}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--warm">
+    <div class="container">
+      <div class="section__head">
+        <span class="eyebrow">Where we are</span>
+        <h2>Today: Southern California. Tomorrow: your city.</h2>
+        <p>We started where we live and we're expanding city by city.</p>
+      </div>
+
+      <div class="coverage">
+        <div class="coverage-card">
+          <span class="coverage-card__pill pill">Live now</span>
+          <h3>Orange County · Los Angeles</h3>
+          <p>1,500+ activities across libraries, parks, museums, and venues from Irvine to Pasadena and everywhere in between.</p>
+        </div>
+        <div class="coverage-card coverage-card--soon">
+          <span class="coverage-card__pill pill pill--ink">Up next</span>
+          <h3>Your city — let us know</h3>
+          <p>Want FamPass where you live? Drop us a line and tell us. We add new metro areas based on where parents ask first.</p>
+          <a href="mailto:dev@fampass.io?subject=FamPass%20in%20my%20city" class="btn btn--ghost btn--sm" style="margin-top: 14px;">Email us your city</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <CTAStrip />
+</Base>
+
+<style>
+  .about-story {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: clamp(40px, 6vw, 80px);
+    align-items: start;
+  }
+  .about-story__copy h2 { max-width: 520px; }
+  .about-story__copy p { max-width: 540px; }
+  .about-story__media {
+    position: sticky;
+    top: 100px;
+  }
+  .about-story__media img {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .principles {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    max-width: 920px;
+    margin-inline: auto;
+  }
+  .principle {
+    background: #fff;
+    border: 1px solid var(--color-line-soft);
+    border-radius: var(--radius-lg);
+    padding: 32px 28px;
+  }
+  .principle h3 {
+    font-family: var(--font-serif);
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: var(--color-ink);
+  }
+
+  .coverage {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    max-width: 920px;
+    margin-inline: auto;
+  }
+  .coverage-card {
+    background: #fff;
+    border: 1px solid var(--color-line-soft);
+    border-radius: var(--radius-lg);
+    padding: 32px 28px;
+  }
+  .coverage-card--soon { background: var(--color-bg-warm); border-style: dashed; }
+  .coverage-card__pill { margin-bottom: 14px; }
+  .coverage-card h3 {
+    font-family: var(--font-serif);
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--color-ink);
+  }
+
+  @media (max-width: 880px) {
+    .about-story { grid-template-columns: 1fr; }
+    .about-story__media { position: static; max-width: 480px; margin-inline: auto; }
+    .principles, .coverage { grid-template-columns: 1fr; }
+  }
+</style>

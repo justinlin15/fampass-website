@@ -1,0 +1,88 @@
+---
+const steps = [
+  {
+    n: '01',
+    title: 'Download free',
+    body: 'Get FamPass on the App Store. Set your home location, your kids\' ages, and the categories you care about — takes about 30 seconds.',
+  },
+  {
+    n: '02',
+    title: 'Browse the feed',
+    body: 'Open the app, see what\'s on. Filter by date, distance, or age. Switch to map view to see what\'s walking distance from a specific weekend errand.',
+  },
+  {
+    n: '03',
+    title: 'Save it. Show up.',
+    body: 'Tap save to send to your calendar with directions, ticket links, and reminders. Or just screenshot and group-text it to the other parent.',
+  },
+];
+---
+<section class="how section" id="how-it-works">
+  <div class="container">
+    <div class="section__head">
+      <span class="eyebrow">How it works</span>
+      <h2>Three steps. About a minute.</h2>
+      <p>Most parents are saving their first activity before they finish their coffee.</p>
+    </div>
+
+    <div class="how__grid">
+      {steps.map(s => (
+        <article class="how__step">
+          <span class="how__num">{s.n}</span>
+          <h3>{s.title}</h3>
+          <p>{s.body}</p>
+        </article>
+      ))}
+    </div>
+
+    <div class="how__connector" aria-hidden="true">
+      <svg viewBox="0 0 800 40" preserveAspectRatio="none">
+        <path d="M 0 20 C 200 0, 600 40, 800 20" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 6" fill="none" />
+      </svg>
+    </div>
+  </div>
+</section>
+
+<style>
+  .how { background: var(--color-bg-warm); }
+  .how__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+    position: relative;
+    z-index: 2;
+  }
+  .how__step {
+    background: #fff;
+    border: 1px solid var(--color-line-soft);
+    border-radius: var(--radius-lg);
+    padding: 36px 28px;
+    box-shadow: var(--shadow-sm);
+  }
+  .how__num {
+    display: inline-block;
+    font-family: var(--font-serif);
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--color-accent);
+    margin-bottom: 16px;
+    letter-spacing: -0.02em;
+  }
+  .how__step h3 { margin-bottom: 10px; }
+
+  .how__connector {
+    margin-top: -24px;
+    color: var(--color-accent);
+    opacity: 0.35;
+    height: 40px;
+    pointer-events: none;
+    z-index: 1;
+    position: relative;
+  }
+  .how__connector svg { width: 100%; height: 100%; }
+
+  @media (max-width: 880px) {
+    .how__grid { grid-template-columns: 1fr; gap: 18px; }
+    .how__connector { display: none; }
+  }
+</style>

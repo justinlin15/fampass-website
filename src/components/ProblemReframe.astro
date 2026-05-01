@@ -1,0 +1,126 @@
+---
+const tabs = [
+  'eventbrite.com',
+  'local church events',
+  'city rec calendar',
+  'instagram saved posts',
+  'mom group thread',
+  'local library calendar',
+  'museum events page',
+  'kid friendly blog',
+];
+---
+<section class="problem section section--warm">
+  <div class="container">
+    <div class="problem__grid">
+      <div class="problem__copy">
+        <span class="eyebrow">The problem</span>
+        <h2 class="mt-4">Stop opening 8 tabs every Saturday morning.</h2>
+        <p class="lede mt-4">
+          You know the drill. The kids are bouncing off the walls, you've got
+          a free afternoon, and you spend forty-five minutes Googling
+          "things to do with kids near me" — clicking through eight different
+          sites, three of which are dead links and one of which is
+          last year's calendar.
+        </p>
+        <p class="mt-4">
+          FamPass does the hunting for you. We gather family-friendly activities
+          from libraries, parks, museums, recreation departments, ticketing
+          platforms, and local venues — every single day — and put them in
+          one clean, searchable feed. With dates. With directions. With actual
+          age recommendations.
+        </p>
+        <p class="mt-4">
+          So you can spend less time researching and more time showing up.
+        </p>
+      </div>
+
+      <div class="problem__visual">
+        <div class="tabs">
+          {tabs.map((t, i) => (
+            <div class={`tabs__row tabs__row--${i % 4}`}>
+              <span class="tabs__dot tabs__dot--red"></span>
+              <span class="tabs__dot tabs__dot--yellow"></span>
+              <span class="tabs__dot tabs__dot--green"></span>
+              <span class="tabs__url">{t}</span>
+              <span class="tabs__close" aria-hidden="true">×</span>
+            </div>
+          ))}
+        </div>
+        <div class="tabs__caption">…and you still don't know what's on tonight.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .problem__grid {
+    display: grid;
+    grid-template-columns: 1.05fr 1fr;
+    gap: clamp(40px, 6vw, 80px);
+    align-items: center;
+  }
+  .problem__copy h2 { max-width: 520px; }
+  .problem__copy .lede { max-width: 520px; }
+  .problem__copy p { max-width: 520px; }
+
+  .tabs {
+    background: #fff;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-width: 480px;
+    margin-inline: auto;
+    transform: rotate(-1.5deg);
+  }
+  .tabs__row {
+    display: grid;
+    grid-template-columns: auto auto auto 1fr auto;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    background: var(--color-bg-warm);
+    border-radius: 10px;
+    font-size: 0.86rem;
+    color: var(--color-ink-soft);
+    border: 1px solid var(--color-line-soft);
+  }
+  .tabs__row--0 { transform: rotate(.4deg); }
+  .tabs__row--2 { transform: rotate(-.3deg); }
+  .tabs__row--3 { transform: rotate(.2deg); }
+  .tabs__dot {
+    width: 9px; height: 9px; border-radius: 50%;
+  }
+  .tabs__dot--red    { background: #FF5F57; }
+  .tabs__dot--yellow { background: #FEBC2E; }
+  .tabs__dot--green  { background: #28C840; }
+  .tabs__url {
+    font-family: ui-monospace, 'SF Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--color-ink-soft);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-left: 6px;
+  }
+  .tabs__close {
+    color: var(--color-ink-muted);
+    font-size: 1rem;
+    line-height: 1;
+  }
+  .tabs__caption {
+    text-align: center;
+    margin-top: 24px;
+    font-size: 0.92rem;
+    color: var(--color-ink-muted);
+    font-style: italic;
+  }
+
+  @media (max-width: 880px) {
+    .problem__grid { grid-template-columns: 1fr; }
+    .problem__visual { order: -1; margin-bottom: 16px; }
+  }
+</style>
