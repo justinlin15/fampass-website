@@ -1,0 +1,229 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+
+const faqs = [
+  {
+    q: 'How do I cancel or manage my subscription?',
+    a: 'Subscriptions are billed through your Apple ID. Open Settings → tap your name → Subscriptions → FamPass to manage or cancel. You\'ll keep Premium until the end of your current billing period.',
+  },
+  {
+    q: 'Events aren\'t loading. What should I do?',
+    a: 'First, check your internet connection. Force-quit FamPass and reopen it. If the issue continues, email dev@fampass.io with your iPhone model and iOS version and we\'ll dig in.',
+  },
+  {
+    q: 'I found incorrect event information.',
+    a: 'Tap the "Report an issue" link on any event listing in the app, or use the form below. We aggregate from many sources and details occasionally drift — we typically correct flagged listings within 24 hours.',
+  },
+  {
+    q: 'How do I delete my account?',
+    a: 'You can request deletion from inside the app (Settings → Account → Delete Account) or by emailing dev@fampass.io. We remove all account data within 30 days, per Apple\'s guidelines.',
+  },
+  {
+    q: 'How do I suggest an event?',
+    a: 'Open the More menu in the app and tap "Suggest an Event." Both one-time and recurring events are welcome. A real human reviews submissions, usually within 24 hours.',
+  },
+  {
+    q: 'Is FamPass on Android?',
+    a: 'Not yet — iOS launched first because we\'re a small team and wanted to iterate quickly. Email dev@fampass.io to be notified when Android is ready.',
+  },
+];
+---
+<Base
+  title="Support — FamPass"
+  description="Get help with FamPass. Send us feedback, report an issue, or browse common questions."
+  canonical="https://fampass.io/support.html"
+>
+  <PageHero
+    eyebrow="Support"
+    title="We read every message."
+    lede="Real humans, usually within 24 hours. Whether it's a bug, a missing event, or a thank-you note — we want to hear it."
+  />
+
+  <section class="section">
+    <div class="container">
+      <div class="support-grid">
+        <!-- contact options -->
+        <aside class="support-side">
+          <article class="support-card">
+            <span class="support-card__icon" aria-hidden="true">✉</span>
+            <h3>Email us</h3>
+            <p>For account issues, subscription questions, or anything urgent.</p>
+            <a href="mailto:dev@fampass.io" class="btn btn--ghost btn--sm">dev@fampass.io</a>
+          </article>
+
+          <article class="support-card">
+            <span class="support-card__icon" aria-hidden="true">＋</span>
+            <h3>Suggest an event</h3>
+            <p>Know a great storytime, festival, or class we're missing?</p>
+            <p class="muted" style="font-size: 0.9rem; margin-top: 8px;">
+              In the app: <strong>More → Suggest an Event</strong>
+            </p>
+          </article>
+
+          <article class="support-card">
+            <span class="support-card__icon" aria-hidden="true">⚑</span>
+            <h3>Report a listing</h3>
+            <p>Wrong date, broken link, or something that shouldn't be there?</p>
+            <p class="muted" style="font-size: 0.9rem; margin-top: 8px;">
+              On any event, tap <strong>Report an issue</strong>
+            </p>
+          </article>
+        </aside>
+
+        <!-- form -->
+        <div class="support-form">
+          <h2>Send feedback</h2>
+          <p class="lede mt-2">Bug reports, feature requests, partnership inquiries, or just hello. We answer everything.</p>
+
+          <form id="feedbackForm" class="mt-6">
+            <div class="field">
+              <label for="name">Your name</label>
+              <input type="text" id="name" name="name" placeholder="Maya" required />
+            </div>
+            <div class="field">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" placeholder="you@example.com" required />
+            </div>
+            <div class="field">
+              <label for="message">Message</label>
+              <textarea id="message" name="message" rows="5" placeholder="What's on your mind?" required></textarea>
+            </div>
+            <button type="submit" class="btn btn--primary">Send Feedback</button>
+            <div id="feedbackMessage" class="form-message"></div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--warm">
+    <div class="container container--narrow">
+      <div class="section__head">
+        <span class="eyebrow">Common questions</span>
+        <h2>Before you write — maybe one of these helps.</h2>
+      </div>
+
+      <div class="faq__list">
+        {faqs.map(item => (
+          <details class="faq__item">
+            <summary>
+              <span>{item.q}</span>
+              <span class="faq__icon" aria-hidden="true">
+                <svg viewBox="0 0 16 16" width="14" height="14"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </span>
+            </summary>
+            <p>{item.a}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Firebase SDK + feedback handler -->
+  <script is:inline src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script is:inline src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script is:inline src="/js/firebase-config.js"></script>
+  <script is:inline src="/js/feedback.js"></script>
+</Base>
+
+<style>
+  .support-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: clamp(24px, 4vw, 56px);
+    align-items: start;
+  }
+
+  .support-side { display: flex; flex-direction: column; gap: 16px; }
+  .support-card {
+    background: #fff;
+    border: 1px solid var(--color-line-soft);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+  }
+  .support-card__icon {
+    display: inline-flex;
+    width: 40px; height: 40px;
+    background: var(--color-accent-lo);
+    color: var(--color-accent-hi);
+    border-radius: 12px;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 14px;
+  }
+  .support-card h3 {
+    font-size: 1.1rem;
+    font-family: var(--font-sans);
+    font-weight: 600;
+    color: var(--color-ink);
+    margin-bottom: 6px;
+  }
+  .support-card p {
+    color: var(--color-ink-soft);
+    font-size: 0.94rem;
+    line-height: 1.5;
+  }
+  .support-card .btn { margin-top: 12px; }
+
+  .support-form {
+    background: var(--color-bg-warm);
+    border: 1px solid var(--color-line-soft);
+    border-radius: var(--radius-lg);
+    padding: clamp(28px, 4vw, 44px);
+  }
+  .support-form h2 { font-size: 1.8rem; }
+
+  /* FAQ list reuses styling from the homepage FAQ */
+  .faq__list {
+    background: #fff;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+  .faq__item { border-bottom: 1px solid var(--color-line-soft); }
+  .faq__item:last-child { border-bottom: 0; }
+  .faq__item summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 22px 28px;
+    font-weight: 500;
+    font-size: 1.04rem;
+    color: var(--color-ink);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    transition: background .12s ease;
+  }
+  .faq__item summary::-webkit-details-marker { display: none; }
+  .faq__item summary:hover { background: var(--color-bg-warm); }
+  .faq__icon {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: var(--color-bg-warm);
+    color: var(--color-ink);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: transform .2s ease, background .12s ease, color .12s ease;
+  }
+  .faq__item[open] .faq__icon {
+    transform: rotate(180deg);
+    background: var(--color-accent);
+    color: #fff;
+  }
+  .faq__item p {
+    padding: 0 28px 24px;
+    color: var(--color-ink-soft);
+    line-height: 1.6;
+    max-width: 70ch;
+  }
+
+  @media (max-width: 880px) {
+    .support-grid { grid-template-columns: 1fr; }
+  }
+</style>

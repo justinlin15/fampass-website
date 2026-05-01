@@ -1,0 +1,154 @@
+---
+const photo = 'https://images.pexels.com/photos/33744867/pexels-photo-33744867.jpeg?auto=compress&cs=tinysrgb&w=1400';
+---
+<section class="built section">
+  <div class="container">
+    <div class="built__grid">
+      <div class="built__media">
+        <img src={photo} alt="Family enjoying time together" loading="lazy" />
+        <div class="built__badge">
+          <span class="built__badge-icon">❤️</span>
+          <div>
+            <strong>Built by parents</strong>
+            <span class="muted">For parents</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="built__copy">
+        <span class="eyebrow">Why we made this</span>
+        <h2 class="mt-4">Because we got tired of Googling, too.</h2>
+        <p class="lede mt-4">
+          FamPass started in a kitchen in Orange County. Two parents, three
+          kids between them, and one shared frustration: there was no good way
+          to find out what was happening for kids each week.
+        </p>
+        <p class="mt-4">
+          City rec centers had PDFs from 2019. Library calendars hid in the
+          fifth tab of a sub-page. Mom group threads were great until you
+          tried to search them. We wanted one app that pulled it all together —
+          honestly and without the marketing fluff.
+        </p>
+        <p class="mt-4">
+          That's what FamPass is. We're parents shipping a tool we wished
+          existed. We use it ourselves every Saturday morning.
+        </p>
+
+        <ul class="built__values">
+          <li>
+            <span class="built__values-icon" aria-hidden="true">🔒</span>
+            <div>
+              <strong>No data resold.</strong>
+              <span>We don't sell your location, your kids' ages, or anything else.</span>
+            </div>
+          </li>
+          <li>
+            <span class="built__values-icon" aria-hidden="true">🤝</span>
+            <div>
+              <strong>Honest sourcing.</strong>
+              <span>Every event credits its source. We don't pretend to know what we don't.</span>
+            </div>
+          </li>
+          <li>
+            <span class="built__values-icon" aria-hidden="true">🧭</span>
+            <div>
+              <strong>Locally curated.</strong>
+              <span>A real human reviews flagged events. Our sourcing gets a weekly check-in.</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .built__grid {
+    display: grid;
+    grid-template-columns: 1fr 1.05fr;
+    gap: clamp(40px, 6vw, 80px);
+    align-items: center;
+  }
+
+  .built__media {
+    position: relative;
+    border-radius: var(--radius-xl);
+    overflow: visible;
+  }
+  .built__media img {
+    width: 100%;
+    aspect-ratio: 5 / 6;
+    object-fit: cover;
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-lg);
+  }
+  .built__badge {
+    position: absolute;
+    bottom: 24px;
+    left: 24px;
+    background: #fff;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-md);
+    padding: 12px 18px 12px 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .built__badge-icon {
+    width: 38px; height: 38px;
+    background: var(--color-accent-lo);
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+  .built__badge strong { display: block; font-weight: 600; color: var(--color-ink); }
+  .built__badge .muted { font-size: 0.82rem; }
+
+  .built__copy h2 { max-width: 480px; }
+  .built__copy .lede { max-width: 540px; }
+  .built__copy p { max-width: 540px; }
+
+  .built__values {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 32px;
+    padding-top: 28px;
+    border-top: 1px solid var(--color-line);
+    max-width: 540px;
+  }
+  .built__values li {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .built__values-icon {
+    width: 36px; height: 36px;
+    background: var(--color-bg-warm);
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 18px;
+  }
+  .built__values strong {
+    display: block;
+    font-weight: 600;
+    color: var(--color-ink);
+    font-size: 0.98rem;
+    margin-bottom: 2px;
+  }
+  .built__values span:not(.built__values-icon) {
+    color: var(--color-ink-soft);
+    font-size: 0.92rem;
+    line-height: 1.5;
+  }
+
+  @media (max-width: 880px) {
+    .built__grid { grid-template-columns: 1fr; }
+    .built__media { max-width: 480px; margin-inline: auto; }
+  }
+</style>

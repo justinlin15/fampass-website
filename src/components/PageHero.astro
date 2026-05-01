@@ -1,0 +1,40 @@
+---
+interface Props {
+  eyebrow?: string;
+  title: string;
+  lede?: string;
+  align?: 'left' | 'center';
+  variant?: 'default' | 'compact';
+}
+const { eyebrow, title, lede, align = 'left', variant = 'default' } = Astro.props;
+---
+<section class={`page-hero page-hero--${align} page-hero--${variant}`}>
+  <div class="container container--narrow">
+    {eyebrow && <span class="eyebrow">{eyebrow}</span>}
+    <h1 class={eyebrow ? 'mt-4' : ''}>{title}</h1>
+    {lede && <p class="lede mt-4">{lede}</p>}
+  </div>
+</section>
+
+<style>
+  .page-hero {
+    background: linear-gradient(180deg, var(--color-bg-warm) 0%, #fff 100%);
+    padding-block: clamp(64px, 8vw, 112px) clamp(40px, 5vw, 64px);
+    position: relative;
+    overflow: hidden;
+  }
+  .page-hero::before {
+    content: '';
+    position: absolute;
+    inset: -10% -10% auto auto;
+    width: 380px; height: 380px;
+    background: radial-gradient(closest-side, rgba(230,74,74,.10), transparent 70%);
+    pointer-events: none;
+  }
+  .page-hero h1 { max-width: 720px; }
+  .page-hero .lede { max-width: 620px; }
+  .page-hero--center { text-align: center; }
+  .page-hero--center .container { display: flex; flex-direction: column; align-items: center; }
+  .page-hero--center h1, .page-hero--center .lede { margin-inline: auto; }
+  .page-hero--compact { padding-block: clamp(48px, 6vw, 80px) clamp(24px, 3vw, 36px); }
+</style>

@@ -1,0 +1,58 @@
+---
+const sources = [
+  'Eventbrite',
+  'Ticketmaster',
+  'Local Libraries',
+  'Parks & Rec',
+  'Museums',
+  'City Calendars',
+  'Venue Sites',
+];
+---
+<section class="sources">
+  <div class="container">
+    <p class="sources__lead">
+      Aggregated daily from <strong>30+ trusted sources</strong>, including
+    </p>
+    <ul class="sources__list">
+      {sources.map(s => <li>{s}</li>)}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .sources {
+    background: var(--color-bg);
+    border-bottom: 1px solid var(--color-line);
+    padding-block: 36px;
+  }
+  .sources__lead {
+    font-size: 0.85rem;
+    color: var(--color-ink-muted);
+    text-align: center;
+    margin-bottom: 18px;
+    letter-spacing: 0.02em;
+  }
+  .sources__lead strong { color: var(--color-ink); font-weight: 600; }
+  .sources__list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 28px 40px;
+  }
+  .sources__list li {
+    font-family: var(--font-serif);
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--color-ink-soft);
+    letter-spacing: -0.01em;
+    opacity: 0.7;
+    transition: opacity .15s ease;
+  }
+  .sources__list li:hover { opacity: 1; }
+
+  @media (max-width: 600px) {
+    .sources__list { gap: 14px 22px; }
+    .sources__list li { font-size: .98rem; }
+  }
+</style>

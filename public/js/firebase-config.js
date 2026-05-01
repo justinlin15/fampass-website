@@ -11,4 +11,5 @@ const firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
-const auth = firebase.auth();
+// Only initialize auth if the auth-compat SDK is loaded (admin only)
+const auth = (typeof firebase.auth === 'function') ? firebase.auth() : null;
