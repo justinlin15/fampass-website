@@ -43,7 +43,10 @@ const year = new Date().getFullYear();
   </div>
 
   <div class="container site-footer__bottom">
-    <span>© {year} FamPass. Made for families.</span>
+    <div class="site-footer__legal">
+      <span>© {year} Appystrano, LLC · FamPass is a product of Appystrano, LLC</span>
+      <span class="site-footer__address">PO Box 207, Tustin, CA 92781 · <a href="mailto:dev@fampass.io">dev@fampass.io</a></span>
+    </div>
   </div>
 </footer>
 
@@ -101,9 +104,20 @@ const year = new Date().getFullYear();
     margin-top: 48px;
     padding-top: 24px;
     border-top: 1px solid var(--color-line);
-    font-size: 0.88rem;
+    font-size: 0.84rem;
     color: var(--color-ink-muted);
   }
+  .site-footer__legal {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px 24px;
+  }
+  .site-footer__address a {
+    color: var(--color-ink-muted);
+    transition: color .15s ease;
+  }
+  .site-footer__address a:hover { color: var(--color-accent); }
 
   @media (max-width: 820px) {
     .site-footer__top { grid-template-columns: 1fr; gap: 40px; }

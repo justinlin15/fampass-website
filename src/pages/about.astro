@@ -119,6 +119,34 @@ const heroImg = 'https://images.pexels.com/photos/8208286/pexels-photo-8208286.j
     </div>
   </section>
 
+  <section class="section">
+    <div class="container container--narrow">
+      <div class="company-card">
+        <span class="eyebrow">Company</span>
+        <h2 class="mt-4">FamPass is a product of Appystrano, LLC.</h2>
+        <p class="mt-4">
+          Appystrano, LLC is a California limited liability company that builds
+          family-friendly software. FamPass is its first product. We're a tiny
+          crew of parents shipping tools we wish existed.
+        </p>
+        <dl class="company-card__details">
+          <div>
+            <dt>Mailing address</dt>
+            <dd>PO Box 207<br />Tustin, CA 92781</dd>
+          </div>
+          <div>
+            <dt>Email</dt>
+            <dd><a href="mailto:dev@fampass.io">dev@fampass.io</a></dd>
+          </div>
+          <div>
+            <dt>Entity</dt>
+            <dd>Appystrano, LLC<br />California (United States)</dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
   <CTAStrip />
 </Base>
 
@@ -187,9 +215,51 @@ const heroImg = 'https://images.pexels.com/photos/8208286/pexels-photo-8208286.j
     color: var(--color-ink);
   }
 
+  /* company card */
+  .company-card {
+    background: #fff;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-xl);
+    padding: clamp(36px, 5vw, 56px);
+    box-shadow: var(--shadow-sm);
+  }
+  .company-card h2 {
+    max-width: 540px;
+    font-size: clamp(1.6rem, 2.5vw + .5rem, 2.2rem);
+  }
+  .company-card p {
+    max-width: 600px;
+    color: var(--color-ink-soft);
+  }
+  .company-card__details {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+    margin-top: 36px;
+    padding-top: 32px;
+    border-top: 1px solid var(--color-line-soft);
+  }
+  .company-card__details dt {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--color-ink-muted);
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .company-card__details dd {
+    font-size: 0.96rem;
+    color: var(--color-ink);
+    line-height: 1.5;
+    margin: 0;
+  }
+  .company-card__details a { color: var(--color-accent); }
+  .company-card__details a:hover { color: var(--color-accent-hi); }
+
   @media (max-width: 880px) {
     .about-story { grid-template-columns: 1fr; }
     .about-story__media { position: static; max-width: 480px; margin-inline: auto; }
     .principles, .coverage { grid-template-columns: 1fr; }
+    .company-card__details { grid-template-columns: 1fr; gap: 20px; }
   }
 </style>
