@@ -13,5 +13,13 @@ service cloud.firestore {
       allow create: if true;
       allow read, update, delete: if request.auth != null;
     }
+
+    // TikTok OAuth credentials: SERVER-ONLY (written by the Vercel callback,
+    // read by the marketing worker — both via Firebase Admin SDK, which
+    // bypasses these rules). We explicitly deny ALL client access so
+    // refresh tokens can never leak to any browser session.
+    match /tiktok_credentials/{credId} {
+      allow read, write: if false;
+    }
   }
 }

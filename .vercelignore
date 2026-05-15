@@ -1,0 +1,16 @@
+# Firebase-specific files aren't used by Vercel. We keep them in the repo so
+# `firebase deploy` remains a rollback option, but don't ship them to Vercel.
+.firebase
+.firebaserc
+firebase.json
+firestore.indexes.json
+firestore.rules
+seed-blog-posts.js
+
+# Local-only
+node_modules
+.vercel
+dist
+.env
+.env.local
+.DS_Store
