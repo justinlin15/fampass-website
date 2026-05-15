@@ -16,7 +16,7 @@ import PageHero from '../components/PageHero.astro';
   <section class="section" style="padding-top: clamp(24px, 3vw, 40px);">
     <div class="container container--narrow">
       <article class="prose">
-        <span class="prose__meta">Effective Date: March 12, 2026</span>
+        <span class="prose__meta">Effective Date: May 15, 2026<br /><span style="font-size: 0.85em;">Last updated: May 15, 2026 — Added Section 4 disclosure of TikTok Content Posting and Display API integration for FamPass-operated accounts.</span></span>
 
         <p>Appystrano, LLC ("we," "our," or "us") operates the FamPass mobile application (the "App"). This Privacy Policy explains how we collect, use, and protect your information when you use our App.</p>
 
@@ -51,7 +51,14 @@ import PageHero from '../components/PageHero.astro';
 
         <h2>4. Third-Party Services</h2>
         <p>The App uses Google AdMob to display advertisements to free-tier users. AdMob may collect device identifiers and usage data in accordance with Google's privacy policy. Premium subscribers do not see advertisements and are not subject to AdMob data collection.</p>
-        <p>We do not sell, rent, trade, or otherwise share your personal information with any other third parties.</p>
+
+        <h3 style="font-size: 1.1em; margin-top: 1.75em; margin-bottom: 0.6em;">TikTok</h3>
+        <p>FamPass operates official accounts on TikTok (for example, @fampass.oc) and uses TikTok's Content Posting API and Display API to publish short-form videos about local family events to those accounts on our own behalf. Authorized FamPass administrators sign in with TikTok using OAuth to grant our backend permission to upload videos and read public engagement metrics (views, likes, comments, shares) for the videos we have posted.</p>
+        <p>We do not collect, store, or share any TikTok data belonging to end users of the FamPass iOS app. End users are not asked to connect a TikTok account, and we do not access TikTok profile data, friend lists, viewing history, or any other personal information from app users.</p>
+        <p>From the FamPass-operated TikTok accounts we connect, we store: the TikTok account's <code>open_id</code>, display name, username, and the access and refresh tokens required to post on our behalf. These tokens are stored encrypted at rest in our database and are used solely to publish videos and retrieve engagement metrics for the connected account.</p>
+        <p>An authorized administrator may disconnect the integration at any time by revoking access at <a href="https://www.tiktok.com/setting/account">tiktok.com/setting/account</a>, which immediately invalidates the tokens we hold.</p>
+
+        <p style="margin-top: 1.5em;">We do not sell, rent, trade, or otherwise share your personal information with any other third parties.</p>
 
         <h2>5. Children's Privacy</h2>
         <p>FamPass is designed for parents and caregivers to discover family-friendly events. The App is not directed at children under the age of 13, and we do not knowingly collect personal information from children under 13 in compliance with the Children's Online Privacy Protection Act (COPPA).</p>

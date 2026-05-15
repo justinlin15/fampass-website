@@ -1,0 +1,20 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+
+  "cleanUrls": true,
+
+  "redirects": [
+    {
+      "source": "/blog/:slug*",
+      "destination": "/resources/:slug*",
+      "permanent": true
+    }
+  ],
+
+  "rewrites": [
+    {
+      "source": "/resources/:slug+",
+      "destination": "/resources"
+    }
+  ]
+}
