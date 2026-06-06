@@ -3,7 +3,10 @@
 // ============================================
 
 (function () {
-  const PAGE_SIZE = 10;
+  // Load a large first batch so the listing is fully populated on initial load
+  // (no "Load more" needed for a normal-sized blog). Pagination still kicks in
+  // automatically if the post count ever exceeds this.
+  const PAGE_SIZE = 60;
   let lastDoc = null;
   let loading = false;
 
