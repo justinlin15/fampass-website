@@ -9,12 +9,12 @@ const TIKTOK_API = "https://open.tiktokapis.com";
 // Scopes we request at install time. Keep this list in sync with what's enabled
 // in the TikTok developer portal — requesting a scope that isn't enabled returns
 // `invalid_scope` and the user can't even start the OAuth flow.
-//
-// Post-audit we'll also want `video.list` to enable metrics polling.
 export const DEFAULT_OAUTH_SCOPES = [
   "user.info.basic",
+  "user.info.stats",
   "video.publish",
   "video.upload",
+  "video.list",
 ] as const;
 
 export class TikTokAuthError extends Error {}
