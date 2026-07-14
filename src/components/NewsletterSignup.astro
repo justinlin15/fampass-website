@@ -1,0 +1,261 @@
+---
+// Reusable newsletter signup form. Two variants:
+//   • band    — a full-width, prominent section (homepage, /resources)
+//   • compact — a slim inline form (site-wide, above the footer)
+// Both POST to /api/subscribe (see src/pages/api/subscribe.ts), which talks to
+// Beehiiv server-side. Progressive enhancement: it's a real <form> that also
+// works without JS; the inline script upgrades it to an async submit with
+// inline success/error status.
+interface Props {
+  variant?: "band" | "compact";
+}
+const { variant = "band" } = Astro.props;
+
+const metros = [
+  "Los Angeles",
+  "Orange County",
+  "San Diego",
+  "San Francisco",
+  "Silicon Valley",
+  "Oakland & East Bay",
+];
+---
+
+{variant === "band" ? (
+  <section class="nl-band" id="newsletter">
+    <div class="container container--narrow nl-band__inner">
+      <span class="eyebrow" style="color: var(--color-accent);">Free weekly email</span>
+      <h2>This weekend's family plans, in your inbox.</h2>
+      <p class="lede">
+        New events, deals, and guides for your area — hand-picked and sent every
+        week. No spam, unsubscribe anytime.
+      </p>
+
+      <form class="nl-form" data-newsletter-form action="/api/subscribe" method="POST" novalidate>
+        <div class="nl-form__row">
+          <input
+            class="nl-form__email"
+            type="email"
+            name="email"
+            inputmode="email"
+            autocomplete="email"
+            required
+            placeholder="you@email.com"
+            aria-label="Email address"
+          />
+          <select class="nl-form__metro" name="metro" aria-label="Your area (optional)">
+            <option value="">Your area (optional)</option>
+            {metros.map((m) => <option value={m}>{m}</option>)}
+          </select>
+          <button class="btn btn--accent" type="submit" data-submit>Subscribe</button>
+        </div>
+        <!-- honeypot: hidden from humans, tempting to bots -->
+        <input class="nl-form__hp" type="text" name="hp" tabindex="-1" autocomplete="off" aria-hidden="true" />
+        <p class="nl-form__status" data-status role="status" aria-live="polite"></p>
+      </form>
+    </div>
+  </section>
+) : (
+  <section class="nl-compact">
+    <div class="container nl-compact__inner">
+      <div class="nl-compact__copy">
+        <strong>Get the free weekly family-events email</strong>
+        <span>New events, deals &amp; guides for your area. Unsubscribe anytime.</span>
+      </div>
+      <form class="nl-form nl-form--compact" data-newsletter-form action="/api/subscribe" method="POST" novalidate>
+        <div class="nl-form__row">
+          <input
+            class="nl-form__email"
+            type="email"
+            name="email"
+            inputmode="email"
+            autocomplete="email"
+            required
+            placeholder="you@email.com"
+            aria-label="Email address"
+          />
+          <button class="btn btn--accent btn--sm" type="submit" data-submit>Subscribe</button>
+        </div>
+        <input class="nl-form__hp" type="text" name="hp" tabindex="-1" autocomplete="off" aria-hidden="true" />
+        <p class="nl-form__status" data-status role="status" aria-live="polite"></p>
+      </form>
+    </div>
+  </section>
+)}
+
+<style>
+  /* ---- band variant ---- */
+  .nl-band {
+    background: var(--color-bg-warm);
+    border-top: 1px solid var(--color-line);
+    border-bottom: 1px solid var(--color-line);
+    padding-block: clamp(56px, 9vw, 88px);
+  }
+  .nl-band__inner {
+    text-align: center;
+  }
+  .nl-band h2 {
+    margin-top: 12px;
+  }
+  .nl-band .lede {
+    margin: 16px auto 0;
+    max-width: 560px;
+  }
+  .nl-band .nl-form {
+    margin-top: 28px;
+  }
+
+  /* ---- compact variant (site-wide, above footer) ---- */
+  .nl-compact {
+    background: var(--color-bg-deeper);
+    border-top: 1px solid var(--color-line);
+  }
+  .nl-compact__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: clamp(20px, 4vw, 48px);
+    padding-block: 28px;
+    flex-wrap: wrap;
+  }
+  .nl-compact__copy {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .nl-compact__copy strong {
+    font-size: 1.05rem;
+    color: var(--color-ink);
+  }
+  .nl-compact__copy span {
+    font-size: 0.92rem;
+    color: var(--color-ink-muted);
+  }
+
+  /* ---- shared form ---- */
+  .nl-form {
+    width: 100%;
+  }
+  .nl-band .nl-form {
+    max-width: 620px;
+    margin-inline: auto;
+  }
+  .nl-form--compact {
+    width: auto;
+    flex: 1 1 320px;
+    max-width: 460px;
+  }
+  .nl-form__row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .nl-form__email,
+  .nl-form__metro {
+    flex: 1 1 200px;
+    min-width: 0;
+    padding: 13px 16px;
+    font: inherit;
+    font-size: 1rem;
+    color: var(--color-ink);
+    background: var(--color-bg);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-md);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+  .nl-form__email::placeholder { color: var(--color-ink-muted); }
+  .nl-form__email:focus,
+  .nl-form__metro:focus {
+    outline: none;
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px var(--color-accent-lo);
+  }
+  .nl-form__metro { flex: 0 1 200px; }
+  .nl-form--compact .nl-form__email { flex: 1 1 180px; }
+  .nl-form .btn { flex: 0 0 auto; }
+
+  /* honeypot — visually + a11y hidden, still in the DOM for bots */
+  .nl-form__hp {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .nl-form__status {
+    margin-top: 12px;
+    font-size: 0.9rem;
+    min-height: 1.2em;
+    text-align: left;
+  }
+  .nl-band .nl-form__status { text-align: center; }
+  .nl-form__status[data-state="ok"] { color: var(--color-success); }
+  .nl-form__status[data-state="error"] { color: var(--color-accent-hi); }
+
+  @media (max-width: 560px) {
+    .nl-form__row { flex-direction: column; }
+    .nl-form .btn { width: 100%; }
+    .nl-compact__inner { flex-direction: column; align-items: stretch; text-align: left; }
+  }
+</style>
+
+<script>
+  // Delegated: wires every [data-newsletter-form] on the page (band + compact
+  // can both be present). Astro bundles this module once regardless of how many
+  // times the component is used.
+  function wire(form: HTMLFormElement) {
+    const status = form.querySelector<HTMLElement>("[data-status]");
+    const button = form.querySelector<HTMLButtonElement>("[data-submit]");
+    const email = form.querySelector<HTMLInputElement>('input[name="email"]');
+
+    function setStatus(msg: string, state: "ok" | "error" | "") {
+      if (!status) return;
+      status.textContent = msg;
+      if (state) status.setAttribute("data-state", state);
+      else status.removeAttribute("data-state");
+    }
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      if (!email || !email.value.trim()) {
+        setStatus("Please enter your email.", "error");
+        email?.focus();
+        return;
+      }
+      if (button) {
+        button.disabled = true;
+        button.dataset.label = button.textContent || "Subscribe";
+        button.textContent = "Subscribing…";
+      }
+      setStatus("", "");
+
+      try {
+        const res = await fetch(form.action, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Accept: "application/json" },
+          body: JSON.stringify(Object.fromEntries(new FormData(form).entries())),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (res.ok && data.ok) {
+          form.reset();
+          setStatus("You're in! Check your inbox to confirm. 🎉", "ok");
+        } else {
+          setStatus(data.error || "Something went wrong. Please try again.", "error");
+        }
+      } catch {
+        setStatus("Network error — please try again.", "error");
+      } finally {
+        if (button) {
+          button.disabled = false;
+          button.textContent = button.dataset.label || "Subscribe";
+        }
+      }
+    });
+  }
+
+  document
+    .querySelectorAll<HTMLFormElement>("[data-newsletter-form]")
+    .forEach(wire);
+</script>
