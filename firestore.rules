@@ -14,6 +14,14 @@ service cloud.firestore {
       allow read, update, delete: if request.auth != null;
     }
 
+    // Business deal submissions (public form at /list-your-deal.html):
+    // anyone can create, admin-only read/update/delete — same posture as
+    // feedback, since both are public-intake / admin-review collections.
+    match /deal_submissions/{submissionId} {
+      allow create: if true;
+      allow read, update, delete: if request.auth != null;
+    }
+
     // TikTok OAuth credentials: SERVER-ONLY (written by the Vercel callback,
     // read by the marketing worker — both via Firebase Admin SDK, which
     // bypasses these rules). We explicitly deny ALL client access so

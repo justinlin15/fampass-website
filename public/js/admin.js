@@ -16,6 +16,7 @@
       dashboardPanel.style.display = 'block';
       loadPosts();
       loadFeedback();
+      loadDealSubmissions();
     } else {
       loginPanel.style.display = 'block';
       dashboardPanel.style.display = 'none';
@@ -297,6 +298,68 @@
       });
     } catch (err) {
       console.error('Load feedback error:', err);
+    }
+  }
+
+  // === DEAL SUBMISSIONS ===
+  var dealsList = document.getElementById('dealsList');
+  var dealsEmpty = document.getElementById('dealsEmpty');
+
+  async function loadDealSubmissions() {
+    try {
+      var snapshot = await db.collection('deal_submissions').orderBy('createdAt', 'desc').get();
+      dealsList.innerHTML = '';
+
+      if (snapshot.empty) {
+        dealsEmpty.style.display = 'block';
+        return;
+      }
+
+      dealsEmpty.style.display = 'none';
+
+      snapshot.forEach(function (doc) {
+        var deal = doc.data();
+        var date = deal.createdAt ? deal.createdAt.toDate().toLocaleString() : 'Unknown';
+        var isPending = deal.status !== 'reviewed';
+        var unreadClass = isPending ? ' feedback-row--unread' : '';
+        var logoLine = deal.logoUrl
+          ? '<div class="feedback-row__message"><a href="' + escapeHTML(deal.logoUrl) + '" target="_blank" rel="noopener">Logo/image link</a></div>'
+          : '';
+
+        var row = document.createElement('div');
+        row.className = 'feedback-row' + unreadClass;
+        row.innerHTML =
+          '<div class="feedback-row__header">' +
+            '<div>' +
+              '<span class="feedback-row__name">' + escapeHTML(deal.businessName) + '</span>' +
+              ' <span class="feedback-row__email">&lt;' + escapeHTML(deal.contactEmail) + '&gt;</span>' +
+            '</div>' +
+            '<span class="feedback-row__date">' + date + '</span>' +
+          '</div>' +
+          '<div class="feedback-row__message"><strong>Expires:</strong> ' + escapeHTML(deal.expirationDate) + '</div>' +
+          '<div class="feedback-row__message">' + escapeHTML(deal.dealDescription) + '</div>' +
+          logoLine +
+          '<div class="feedback-row__actions">' +
+            '<button class="btn btn--sm btn--outline mark-reviewed-btn">' + (isPending ? 'Mark Reviewed' : 'Mark Pending') + '</button>' +
+            '<button class="btn btn--sm btn--outline delete-deal-btn" style="color: var(--color-error); border-color: var(--color-error);">Delete</button>' +
+          '</div>';
+
+        row.querySelector('.mark-reviewed-btn').addEventListener('click', async function () {
+          await db.collection('deal_submissions').doc(doc.id).update({ status: isPending ? 'reviewed' : 'pending' });
+          loadDealSubmissions();
+        });
+
+        row.querySelector('.delete-deal-btn').addEventListener('click', async function () {
+          if (confirm('Delete this deal submission?')) {
+            await db.collection('deal_submissions').doc(doc.id).delete();
+            loadDealSubmissions();
+          }
+        });
+
+        dealsList.appendChild(row);
+      });
+    } catch (err) {
+      console.error('Load deal submissions error:', err);
     }
   }
 
