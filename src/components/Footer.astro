@@ -12,9 +12,19 @@ const year = new Date().getFullYear();
       <a href="https://apps.apple.com/us/app/fampass/id6760528354" class="app-store-badge" target="_blank" rel="noopener">
         <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Download on the App Store" />
       </a>
+      <a href="https://app.fampass.io/events" class="site-footer__browse">On Android or desktop? Use it in your browser →</a>
     </div>
 
     <div class="site-footer__cols">
+      <div>
+        <h5>Browse online</h5>
+        <ul>
+          <li><a href="https://app.fampass.io/events">Events</a></li>
+          <li><a href="https://app.fampass.io/guides">Guides</a></li>
+          <li><a href="https://app.fampass.io/deals">Deals</a></li>
+          <li><a href="https://app.fampass.io">Open web app</a></li>
+        </ul>
+      </div>
       <div>
         <h5>Product</h5>
         <ul>
@@ -77,10 +87,19 @@ const year = new Date().getFullYear();
     max-width: 320px;
     font-size: 0.98rem;
   }
+  .site-footer__browse {
+    display: inline-block;
+    margin-top: 16px;
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--color-accent);
+    transition: color .15s ease;
+  }
+  .site-footer__browse:hover { color: var(--color-accent-hi); text-decoration: underline; }
   .site-footer__cols {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 32px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 28px;
   }
   .site-footer__cols h5 {
     font-size: 0.78rem;
