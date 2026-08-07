@@ -1,10 +1,9 @@
 ---
 const year = new Date().getFullYear();
 
-// Active state for the current page. Normalize away trailing slashes and the
-// legacy `.html` endings the footer links use, so `/about.html` matches `/about`.
-const norm = (p: string) =>
-  p.replace(/\/index\.html$/, '').replace(/\.html$/, '').replace(/\/+$/, '') || '/';
+// Active state for the current page. Normalize trailing slashes so `/resources/`
+// matches the `/resources` pathname (Vercel `cleanUrls` serves extensionless paths).
+const norm = (p: string) => p.replace(/\/+$/, '') || '/';
 const currentPath = norm(Astro.url.pathname);
 const isCurrent = (href: string) => {
   if (!href || href.startsWith('http') || href.includes('#')) return false;
@@ -47,17 +46,17 @@ const isCurrent = (href: string) => {
       <div>
         <h5>Company</h5>
         <ul>
-          <li><a href="/about.html" class:list={[{ 'is-active': isCurrent('/about.html') }]} aria-current={isCurrent('/about.html') ? 'page' : undefined}>About</a></li>
+          <li><a href="/about" class:list={[{ 'is-active': isCurrent('/about') }]} aria-current={isCurrent('/about') ? 'page' : undefined}>About</a></li>
           <li><a href="/resources/" class:list={[{ 'is-active': isCurrent('/resources/') }]} aria-current={isCurrent('/resources/') ? 'page' : undefined}>Resources</a></li>
-          <li><a href="/support.html" class:list={[{ 'is-active': isCurrent('/support.html') }]} aria-current={isCurrent('/support.html') ? 'page' : undefined}>Support</a></li>
-          <li><a href="/list-your-deal.html" class:list={[{ 'is-active': isCurrent('/list-your-deal.html') }]} aria-current={isCurrent('/list-your-deal.html') ? 'page' : undefined}>For Businesses</a></li>
+          <li><a href="/support" class:list={[{ 'is-active': isCurrent('/support') }]} aria-current={isCurrent('/support') ? 'page' : undefined}>Support</a></li>
+          <li><a href="/list-your-deal" class:list={[{ 'is-active': isCurrent('/list-your-deal') }]} aria-current={isCurrent('/list-your-deal') ? 'page' : undefined}>For Businesses</a></li>
         </ul>
       </div>
       <div>
         <h5>Legal</h5>
         <ul>
-          <li><a href="/privacy-policy.html" class:list={[{ 'is-active': isCurrent('/privacy-policy.html') }]} aria-current={isCurrent('/privacy-policy.html') ? 'page' : undefined}>Privacy</a></li>
-          <li><a href="/terms-of-service.html" class:list={[{ 'is-active': isCurrent('/terms-of-service.html') }]} aria-current={isCurrent('/terms-of-service.html') ? 'page' : undefined}>Terms</a></li>
+          <li><a href="/privacy-policy" class:list={[{ 'is-active': isCurrent('/privacy-policy') }]} aria-current={isCurrent('/privacy-policy') ? 'page' : undefined}>Privacy</a></li>
+          <li><a href="/terms-of-service" class:list={[{ 'is-active': isCurrent('/terms-of-service') }]} aria-current={isCurrent('/terms-of-service') ? 'page' : undefined}>Terms</a></li>
         </ul>
       </div>
     </div>
