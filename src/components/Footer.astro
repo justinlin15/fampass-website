@@ -1,5 +1,15 @@
 ---
 const year = new Date().getFullYear();
+
+// Active state for the current page. Normalize away trailing slashes and the
+// legacy `.html` endings the footer links use, so `/about.html` matches `/about`.
+const norm = (p: string) =>
+  p.replace(/\/index\.html$/, '').replace(/\.html$/, '').replace(/\/+$/, '') || '/';
+const currentPath = norm(Astro.url.pathname);
+const isCurrent = (href: string) => {
+  if (!href || href.startsWith('http') || href.includes('#')) return false;
+  return norm(href) === currentPath;
+};
 ---
 <footer class="site-footer">
   <div class="container site-footer__top">
@@ -37,17 +47,17 @@ const year = new Date().getFullYear();
       <div>
         <h5>Company</h5>
         <ul>
-          <li><a href="/about.html">About</a></li>
-          <li><a href="/resources/">Resources</a></li>
-          <li><a href="/support.html">Support</a></li>
-          <li><a href="/list-your-deal.html">For Businesses</a></li>
+          <li><a href="/about.html" class:list={[{ 'is-active': isCurrent('/about.html') }]} aria-current={isCurrent('/about.html') ? 'page' : undefined}>About</a></li>
+          <li><a href="/resources/" class:list={[{ 'is-active': isCurrent('/resources/') }]} aria-current={isCurrent('/resources/') ? 'page' : undefined}>Resources</a></li>
+          <li><a href="/support.html" class:list={[{ 'is-active': isCurrent('/support.html') }]} aria-current={isCurrent('/support.html') ? 'page' : undefined}>Support</a></li>
+          <li><a href="/list-your-deal.html" class:list={[{ 'is-active': isCurrent('/list-your-deal.html') }]} aria-current={isCurrent('/list-your-deal.html') ? 'page' : undefined}>For Businesses</a></li>
         </ul>
       </div>
       <div>
         <h5>Legal</h5>
         <ul>
-          <li><a href="/privacy-policy.html">Privacy</a></li>
-          <li><a href="/terms-of-service.html">Terms</a></li>
+          <li><a href="/privacy-policy.html" class:list={[{ 'is-active': isCurrent('/privacy-policy.html') }]} aria-current={isCurrent('/privacy-policy.html') ? 'page' : undefined}>Privacy</a></li>
+          <li><a href="/terms-of-service.html" class:list={[{ 'is-active': isCurrent('/terms-of-service.html') }]} aria-current={isCurrent('/terms-of-service.html') ? 'page' : undefined}>Terms</a></li>
         </ul>
       </div>
     </div>
@@ -116,6 +126,7 @@ const year = new Date().getFullYear();
     transition: color .15s ease;
   }
   .site-footer__cols a:hover { color: var(--color-accent); }
+  .site-footer__cols a.is-active { color: var(--color-accent); font-weight: 600; }
 
   .site-footer__bottom {
     margin-top: 48px;

@@ -5,13 +5,23 @@ const appLinks = [
   { href: 'https://app.fampass.io/guides', label: 'Guides' },
   { href: 'https://app.fampass.io/deals', label: 'Deals' },
 ];
-// Marketing-site sections
+// Marketing-site sections. `spy` marks links to homepage sections that get an
+// active state from scroll position (handled by JS); the rest match by path.
 const links = [
-  { href: '/#features', label: 'Features' },
-  { href: '/#how-it-works', label: 'How it works' },
-  { href: '/#pricing', label: 'Pricing' },
+  { href: '/#features', label: 'Features', spy: 'features' },
+  { href: '/#how-it-works', label: 'How it works', spy: 'how-it-works' },
+  { href: '/#pricing', label: 'Pricing', spy: 'pricing' },
   { href: '/resources/', label: 'Resources' },
 ];
+
+// Active state for the current page (path-based links only; hash/external links
+// never match here — homepage anchors are handled by scroll-spy at runtime).
+const currentPath = Astro.url.pathname.replace(/\/+$/, '') || '/';
+const isCurrent = (href: string) => {
+  if (!href || href.startsWith('http') || href.includes('#')) return false;
+  return (href.replace(/\/+$/, '') || '/') === currentPath;
+};
+const moreHasActive = links.some(l => isCurrent(l.href));
 ---
 <header class="site-header" id="site-header">
   <div class="container site-header__inner">
@@ -24,14 +34,22 @@ const links = [
       {appLinks.map(l => <a href={l.href} class="site-header__nav-app">{l.label}</a>)}
       <span class="site-header__nav-sep" aria-hidden="true"></span>
       <div class="site-header__more" data-dropdown>
-        <button type="button" class="site-header__more-btn" aria-haspopup="true" aria-expanded="false">
+        <button type="button" class:list={['site-header__more-btn', { 'is-active': moreHasActive }]} aria-haspopup="true" aria-expanded="false">
           More
           <svg class="site-header__more-caret" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
             <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </button>
         <div class="site-header__more-menu" role="menu">
-          {links.map(l => <a href={l.href} role="menuitem">{l.label}</a>)}
+          {links.map(l => (
+            <a
+              href={l.href}
+              role="menuitem"
+              data-spy={l.spy}
+              class:list={[{ 'is-active': isCurrent(l.href) }]}
+              aria-current={isCurrent(l.href) ? 'page' : undefined}
+            >{l.label}</a>
+          ))}
         </div>
       </div>
     </nav>
@@ -53,7 +71,14 @@ const links = [
       <span class="site-header__mobile-label">Browse online</span>
       {appLinks.map(l => <a href={l.href}>{l.label}</a>)}
       <span class="site-header__mobile-label">Learn more</span>
-      {links.map(l => <a href={l.href}>{l.label}</a>)}
+      {links.map(l => (
+        <a
+          href={l.href}
+          data-spy={l.spy}
+          class:list={[{ 'is-active': isCurrent(l.href) }]}
+          aria-current={isCurrent(l.href) ? 'page' : undefined}
+        >{l.label}</a>
+      ))}
       <a href="https://app.fampass.io" class="site-header__mobile-webapp">Open web app →</a>
       <a href="https://apps.apple.com/us/app/fampass/id6760528354" target="_blank" rel="noopener" class="btn btn--primary">Get the app</a>
     </div>
@@ -191,6 +216,13 @@ const links = [
     color: var(--color-ink);
     background: rgba(26,26,26,.05);
   }
+  /* active (current page / section) */
+  .site-header__more-menu a.is-active {
+    color: var(--color-accent);
+    background: var(--color-accent-lo);
+    font-weight: 600;
+  }
+  .site-header__more-btn.is-active { color: var(--color-accent); }
 
   .site-header__cta { display: inline-flex; align-items: center; gap: 10px; }
   .site-header__cta .btn {
@@ -228,6 +260,11 @@ const links = [
   .site-header__mobile a.btn {
     margin-top: 8px;
     color: #fff;
+  }
+  .site-header__mobile a.is-active {
+    color: var(--color-accent);
+    background: var(--color-accent-lo);
+    font-weight: 600;
   }
   .site-header__mobile-label {
     padding: 12px 14px 4px;
@@ -279,5 +316,39 @@ const links = [
       dd.addEventListener('focusout', e => { if (!dd.contains(e.relatedTarget)) sync(false); });
       dd.addEventListener('keydown', e => { if (e.key === 'Escape') { sync(false); trigger.blur(); } });
     });
+  })();
+
+  // Scroll-spy: highlight the nav link (and the "More" trigger) for whichever
+  // homepage section is currently in view. No-ops on pages without those sections
+  // — path-based active states rendered server-side are left untouched there.
+  (() => {
+    const spyLinks = [...document.querySelectorAll('[data-spy]')];
+    if (!spyLinks.length) return;
+    const ids = [...new Set(spyLinks.map(a => a.dataset.spy))];
+    const sections = ids.map(id => document.getElementById(id)).filter(Boolean);
+    if (!sections.length) return;
+    const moreBtns = [...document.querySelectorAll('.site-header__more-btn')];
+    const visible = new Set();
+    let current;
+    const apply = id => {
+      if (id === current) return;
+      current = id;
+      spyLinks.forEach(a => {
+        const on = !!id && a.dataset.spy === id;
+        a.classList.toggle('is-active', on);
+        if (on) a.setAttribute('aria-current', 'location');
+        else a.removeAttribute('aria-current');
+      });
+      moreBtns.forEach(b => b.classList.toggle('is-active', !!id));
+    };
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) visible.add(e.target.id);
+        else visible.delete(e.target.id);
+      });
+      const active = sections.find(s => visible.has(s.id));
+      apply(active ? active.id : null);
+    }, { rootMargin: '-40% 0px -50% 0px', threshold: 0 });
+    sections.forEach(s => io.observe(s));
   })();
 </script>
