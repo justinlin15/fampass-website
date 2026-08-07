@@ -31,7 +31,7 @@ const moreHasActive = links.some(l => isCurrent(l.href));
     </a>
 
     <nav class="site-header__nav" aria-label="Primary">
-      {appLinks.map(l => <a href={l.href} class="site-header__nav-app">{l.label}</a>)}
+      {appLinks.map(l => <a href={l.href} class="site-header__nav-app" data-track={`nav_${l.label.toLowerCase()}`}>{l.label}</a>)}
       <span class="site-header__nav-sep" aria-hidden="true"></span>
       <div class="site-header__more" data-dropdown>
         <button type="button" class:list={['site-header__more-btn', { 'is-active': moreHasActive }]} aria-haspopup="true" aria-expanded="false">
@@ -55,8 +55,9 @@ const moreHasActive = links.some(l => isCurrent(l.href));
     </nav>
 
     <div class="site-header__cta">
-      <a href="https://app.fampass.io" class="site-header__login">Open web app</a>
-      <a href="https://apps.apple.com/us/app/fampass/id6760528354" target="_blank" rel="noopener" class="btn btn--primary btn--sm">Get the app</a>
+      <a href="https://app.fampass.io" class="site-header__login" data-webapp-link data-track="nav_open_web_app">Open web app</a>
+      <a href="https://apps.apple.com/us/app/fampass/id6760528354" target="_blank" rel="noopener" class="btn btn--primary btn--sm cta-app" data-track="get_the_app">Get the app</a>
+      <a href="https://app.fampass.io" class="btn btn--primary btn--sm cta-web" data-track="open_web_app_btn">Open web app</a>
     </div>
 
     <button class="site-header__toggle" aria-label="Open menu" aria-expanded="false" aria-controls="site-header-mobile">
@@ -69,7 +70,7 @@ const moreHasActive = links.some(l => isCurrent(l.href));
   <div class="site-header__mobile" id="site-header-mobile" hidden>
     <div class="container">
       <span class="site-header__mobile-label">Browse online</span>
-      {appLinks.map(l => <a href={l.href}>{l.label}</a>)}
+      {appLinks.map(l => <a href={l.href} data-track={`nav_${l.label.toLowerCase()}`}>{l.label}</a>)}
       <span class="site-header__mobile-label">Learn more</span>
       {links.map(l => (
         <a
@@ -79,8 +80,9 @@ const moreHasActive = links.some(l => isCurrent(l.href));
           aria-current={isCurrent(l.href) ? 'page' : undefined}
         >{l.label}</a>
       ))}
-      <a href="https://app.fampass.io" class="site-header__mobile-webapp">Open web app →</a>
-      <a href="https://apps.apple.com/us/app/fampass/id6760528354" target="_blank" rel="noopener" class="btn btn--primary">Get the app</a>
+      <a href="https://app.fampass.io" class="site-header__mobile-webapp" data-webapp-link data-track="nav_open_web_app">Open web app →</a>
+      <a href="https://apps.apple.com/us/app/fampass/id6760528354" target="_blank" rel="noopener" class="btn btn--primary cta-app" data-track="get_the_app">Get the app</a>
+      <a href="https://app.fampass.io" class="btn btn--primary cta-web" data-track="open_web_app_btn">Open web app</a>
     </div>
   </div>
 </header>

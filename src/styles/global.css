@@ -177,6 +177,16 @@ p { color: var(--color-ink-soft); }
 
 .btn--sm { padding: 10px 18px; font-size: 0.94rem; }
 
+/* Platform-aware CTAs. Default (JS off / iOS): show the App Store button and
+   the "Open web app" text link. On Android/desktop, the root gets .is-not-ios
+   (set before paint in Base.astro): swap to the web-app button and drop the now
+   redundant text link. .cta-app/.cta-web share the .btn class, so both render
+   as inline-flex in every context they appear. */
+.cta-web { display: none; }
+html.is-not-ios .cta-app { display: none; }
+html.is-not-ios .cta-web { display: inline-flex; }
+html.is-not-ios [data-webapp-link] { display: none; }
+
 /* App Store badge */
 .app-store-badge {
   display: inline-block;
