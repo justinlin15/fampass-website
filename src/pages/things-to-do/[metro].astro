@@ -13,10 +13,11 @@ import CTAStrip from '../../components/CTAStrip.astro';
 import { getMetro, inMetro } from '../../lib/metros';
 import {
   fetchMetroEvents, getWeekendWindow, dateOnly, formatDay, formatTime,
-  priceLabel, buildEventJsonLd, type PublicEvent,
+  priceLabel, categoryEmoji, buildEventJsonLd, type PublicEvent,
 } from '../../lib/events';
 
 const APP_URL = 'https://apps.apple.com/us/app/fampass/id6760528354';
+const WEB_URL = 'https://app.fampass.io';   // responsive web app — sign up / subscribe in a browser
 const SAMPLE_PER_DAY = 6;   // curated taste per day — not the whole feed
 
 const metro = getMetro(Astro.params.metro);
@@ -86,6 +87,7 @@ function eventUrl(e: PublicEvent): string | undefined {
         <a href={APP_URL} class="app-store-badge" target="_blank" rel="noopener">
           <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Download FamPass on the App Store" width="140" height="47" />
         </a>
+        <a href={WEB_URL} class="ttd-weblink" target="_blank" rel="noopener">No iPhone? Use FamPass on the web →</a>
       </div>
     </div>
   </section>
@@ -97,11 +99,12 @@ function eventUrl(e: PublicEvent): string | undefined {
         <ul class="ttd-list">
           {sampleByDay.get(d)!.map((e) => (
             <li class="ttd-card">
-              {e.imageURL && (
-                <div class="ttd-card__media">
-                  <img src={e.imageURL} alt={e.title} loading="lazy" width="120" height="120" />
-                </div>
-              )}
+              <div class="ttd-card__media">
+                <span class="ttd-ph" aria-hidden="true">{categoryEmoji(e.category)}</span>
+                {e.imageURL && (
+                  <img src={e.imageURL} alt={e.title} loading="lazy" width="120" height="120" onerror="this.style.display='none'" />
+                )}
+              </div>
               <div class="ttd-card__body">
                 <div class="ttd-card__meta">
                   {e.category && <span class="ttd-tag">{e.category}</span>}
@@ -139,9 +142,12 @@ function eventUrl(e: PublicEvent): string | undefined {
           <p class="ttd-sample__body">
             The free <strong>FamPass</strong> app has all {fmt(weekendTotal)} this weekend — plus <strong>{fmt(moreBeyondWeekend)}+ more</strong> coming up — filtered by your kids' ages, your budget, and driving distance. Storytimes, festivals, museums, farms, plus local guides and deals, all in one place.
           </p>
-          <a href={APP_URL} class="app-store-badge" target="_blank" rel="noopener">
-            <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Download FamPass on the App Store" width="150" height="50" />
-          </a>
+          <div class="ttd-sample__actions">
+            <a href={APP_URL} class="app-store-badge" target="_blank" rel="noopener">
+              <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Download FamPass on the App Store" width="150" height="50" />
+            </a>
+            <a href={WEB_URL} class="ttd-webbtn" target="_blank" rel="noopener">Or open it on the web →</a>
+          </div>
         </div>
       </div>
     </section>
@@ -154,11 +160,12 @@ function eventUrl(e: PublicEvent): string | undefined {
         <ul class="ttd-list">
           {laterSample.map((e) => (
             <li class="ttd-card">
-              {e.imageURL && (
-                <div class="ttd-card__media">
-                  <img src={e.imageURL} alt={e.title} loading="lazy" width="120" height="120" />
-                </div>
-              )}
+              <div class="ttd-card__media">
+                <span class="ttd-ph" aria-hidden="true">{categoryEmoji(e.category)}</span>
+                {e.imageURL && (
+                  <img src={e.imageURL} alt={e.title} loading="lazy" width="120" height="120" onerror="this.style.display='none'" />
+                )}
+              </div>
               <div class="ttd-card__body">
                 <div class="ttd-card__meta">
                   {e.category && <span class="ttd-tag">{e.category}</span>}
@@ -193,8 +200,10 @@ function eventUrl(e: PublicEvent): string | undefined {
   }
   .ttd-hero h1 { max-width: 760px; letter-spacing: -0.02em; }
   .ttd-hero .lede { max-width: 640px; }
-  .ttd-hero__cta { display: flex; }
+  .ttd-hero__cta { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
   .app-store-badge img { height: 47px; width: auto; display: block; }
+  .ttd-weblink { font-weight: 600; color: var(--color-ink); text-decoration: none; border-bottom: 2px solid var(--color-accent, #e64a4a); padding-bottom: 1px; }
+  .ttd-weblink:hover { color: var(--color-accent, #e64a4a); }
 
   .ttd-day { padding-block: clamp(24px, 3.5vw, 40px); }
   .ttd-day__head {
@@ -215,10 +224,18 @@ function eventUrl(e: PublicEvent): string | undefined {
     transition: border-color .15s ease, box-shadow .15s ease;
   }
   .ttd-card:hover { border-color: var(--color-ink); box-shadow: 0 6px 18px rgba(26,26,26,.06); }
-  .ttd-card__media { flex-shrink: 0; }
+  .ttd-card__media { flex-shrink: 0; position: relative; width: 92px; height: 92px; }
   .ttd-card__media img {
-    width: 92px; height: 92px; object-fit: cover;
-    border-radius: 12px; background: var(--color-bg-warm);
+    position: absolute; inset: 0; z-index: 1;
+    width: 92px; height: 92px; object-fit: cover; border-radius: 12px;
+  }
+  /* category-emoji tile shown when there's no image (or the image 404s and hides itself) */
+  .ttd-ph {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2rem; border-radius: 12px;
+    background: linear-gradient(140deg, var(--color-bg-warm) 0%, #f3ede6 100%);
+    border: 1px solid var(--color-line);
   }
   .ttd-card__body { min-width: 0; }
   .ttd-card__meta { display: flex; gap: 8px; align-items: center; margin-bottom: 6px; flex-wrap: wrap; }
@@ -259,9 +276,14 @@ function eventUrl(e: PublicEvent): string | undefined {
     max-width: 640px; margin: 0 auto 14px;
   }
   .ttd-sample__body { color: rgba(255,255,255,.82); max-width: 620px; margin: 0 auto 24px; }
-  .ttd-sample__card .app-store-badge img { height: 50px; margin: 0 auto; }
+  .ttd-sample__actions { display: flex; align-items: center; justify-content: center; gap: 20px; flex-wrap: wrap; }
+  .ttd-sample__card .app-store-badge img { height: 50px; display: block; }
+  .ttd-webbtn { color: #fff; font-weight: 600; text-decoration: none; border-bottom: 2px solid var(--color-accent-hi, #ff7a7a); padding-bottom: 2px; }
+  .ttd-webbtn:hover { color: var(--color-accent-hi, #ff7a7a); }
 
   @media (max-width: 560px) {
+    .ttd-card__media { width: 68px; height: 68px; }
     .ttd-card__media img { width: 68px; height: 68px; }
+    .ttd-ph { font-size: 1.6rem; }
   }
 </style>

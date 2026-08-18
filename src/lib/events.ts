@@ -116,6 +116,49 @@ export function isFree(price?: string): boolean {
   return /^(free|\$0)$/i.test((price ?? '').trim());
 }
 
+/* ---------- category placeholder (used when an event has no / a broken image) ---------- */
+
+const CATEGORY_EMOJI: Record<string, string> = {
+  'Storytime': '📖',
+  'Arts and Crafts': '🎨',
+  'Music': '🎵',
+  'Dance': '💃',
+  'Theater and Shows': '🎭',
+  'Team Sports': '⚽',
+  'Swimming': '🏊',
+  'Gymnastics': '🤸',
+  'Martial Arts': '🥋',
+  'Skating and Wheels': '🛼',
+  'Indoor Play': '🧸',
+  'Fun Run and Fitness': '🏃',
+  'Hiking and Trails': '🥾',
+  'Beach and Water': '🏖️',
+  'Parks and Playgrounds': '🛝',
+  'Nature and Wildlife': '🦋',
+  'Farms and Animals': '🐐',
+  'STEM and Coding': '🔬',
+  'Classes and Workshops': '📝',
+  'Museum': '🏛️',
+  'Food and Dining': '🍴',
+  'Cooking Class': '👩‍🍳',
+  'Farmers Market': '🧺',
+  'Movies': '🎬',
+  'Theme Parks': '🎢',
+  'Camps': '🏕️',
+  'Festival': '🎉',
+  'Baby and Toddler': '🍼',
+  'Community Event': '🎪',
+  'Halloween': '🎃',
+  'Christmas and Holiday': '🎄',
+  'Easter and Spring': '🌷',
+  'Fourth of July': '🎆',
+  'Fire Station': '🚒',
+};
+
+export function categoryEmoji(category?: string): string {
+  return (category && CATEGORY_EMOJI[category]) || '🎈';
+}
+
 /* ---------- JSON-LD Event schema (Google rich results) ---------- */
 
 export function buildEventJsonLd(events: PublicEvent[], metro: Metro, pageUrl: string) {
