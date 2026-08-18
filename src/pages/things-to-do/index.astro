@@ -1,0 +1,57 @@
+---
+// Directory hub: links out to every metro's "things to do this weekend" page.
+// Static — it just lists the metros (the per-metro pages are the dynamic ones).
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import CTAStrip from '../../components/CTAStrip.astro';
+import { METROS } from '../../lib/metros';
+
+const canonical = 'https://fampass.io/things-to-do/';
+const sorted = [...METROS].sort((a, b) => a.name.replace(/^the /, '').localeCompare(b.name.replace(/^the /, '')));
+---
+<Base
+  title="Things to Do With Kids Near You This Weekend | FamPass"
+  description="Free & family-friendly things to do this weekend, city by city — storytimes, festivals, museums, farms, and more. Pick your area and see what's on."
+  canonical={canonical}
+>
+  <PageHero
+    eyebrow="Things to do"
+    title="Find things to do with the kids — city by city."
+    lede="Weekend plans, sorted. Pick your area for a fresh, hand-picked list of family-friendly events — most of them free."
+  />
+
+  <section class="section">
+    <div class="container">
+      <ul class="metro-grid">
+        {sorted.map((m) => (
+          <li>
+            <a class="metro-card" href={`/things-to-do/${m.slug}`}>
+              <span class="metro-card__name">{m.name.replace(/^the /, '')}</span>
+              <span class="metro-card__state">{m.state}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <CTAStrip />
+</Base>
+
+<style>
+  .metro-grid {
+    list-style: none; margin: 0; padding: 0;
+    display: grid; gap: 12px;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  }
+  .metro-card {
+    display: flex; align-items: baseline; justify-content: space-between; gap: 10px;
+    padding: 16px 18px;
+    border: 1px solid var(--color-line); border-radius: var(--radius-lg, 16px);
+    background: #fff; text-decoration: none; color: var(--color-ink);
+    transition: border-color .15s ease, box-shadow .15s ease, transform .15s ease;
+  }
+  .metro-card:hover { border-color: var(--color-ink); box-shadow: 0 6px 18px rgba(26,26,26,.06); transform: translateY(-1px); }
+  .metro-card__name { font-weight: 600; font-size: 1.02rem; }
+  .metro-card__state { font-size: .8rem; color: var(--color-ink-soft, #888); font-weight: 600; }
+</style>

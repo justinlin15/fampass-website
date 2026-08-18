@@ -1,0 +1,289 @@
+---
+// Programmatic-SEO page: "Things to Do With Kids in {Metro} This Weekend".
+// SSR (not prerendered) so the weekend list is always current; edge-cached on
+// Vercel so it's still fast + cheap. One page per FamPass metro.
+//
+// Product note: we show a curated SAMPLE (a handful per day), not the full feed.
+// Enough real content + Event schema to rank, but the page's job is to convert —
+// so a strong CTA makes clear this is a taste and the app has everything.
+export const prerender = false;
+
+import Base from '../../layouts/Base.astro';
+import CTAStrip from '../../components/CTAStrip.astro';
+import { getMetro, inMetro } from '../../lib/metros';
+import {
+  fetchMetroEvents, getWeekendWindow, dateOnly, formatDay, formatTime,
+  priceLabel, categoryEmoji, buildEventJsonLd, type PublicEvent,
+} from '../../lib/events';
+
+const APP_URL = 'https://apps.apple.com/us/app/fampass/id6760528354';
+const WEB_URL = 'https://app.fampass.io';   // responsive web app — sign up / subscribe in a browser
+const SAMPLE_PER_DAY = 6;   // curated taste per day — not the whole feed
+
+const metro = getMetro(Astro.params.metro);
+if (!metro) {
+  return new Response('Metro not found', { status: 404 });
+}
+
+// Edge-cache the rendered HTML: fast for readers + crawlers, fresh within the hour.
+Astro.response.headers.set('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=86400');
+
+const events = await fetchMetroEvents(metro.slug);
+const weekend = getWeekendWindow();
+const weekendAll = events.filter((e) => weekend.days.has(dateOnly(e.startDate)));
+
+// Group the weekend by day, then cap each day to a curated sample.
+const byDay = new Map<string, PublicEvent[]>();
+for (const e of weekendAll) {
+  const d = dateOnly(e.startDate);
+  if (!byDay.has(d)) byDay.set(d, []);
+  byDay.get(d)!.push(e);
+}
+const days = [...byDay.keys()].sort();
+const shown: PublicEvent[] = [];
+const sampleByDay = new Map<string, PublicEvent[]>();
+for (const d of days) {
+  const sample = byDay.get(d)!.slice(0, SAMPLE_PER_DAY);
+  sampleByDay.set(d, sample);
+  shown.push(...sample);
+}
+
+// Fallback for the rare metro with no weekend events: a small "coming up" sample.
+const laterSample = weekendAll.length === 0
+  ? events.filter((e) => !weekend.days.has(dateOnly(e.startDate))).slice(0, 12)
+  : [];
+
+const fmt = (n: number) => n.toLocaleString('en-US');
+const weekendTotal = weekendAll.length;
+const totalUpcoming = events.length;
+const moreBeyondWeekend = Math.max(0, totalUpcoming - weekendTotal);
+const freeCount = weekendAll.filter((e) => priceLabel(e.price) === 'Free').length;
+
+const canonical = `https://fampass.io/things-to-do/${metro.slug}`;
+const title = `Things to Do With Kids ${inMetro(metro)} This Weekend | FamPass`;
+const description = weekendTotal
+  ? `${weekendTotal} family-friendly things to do ${inMetro(metro)} this weekend (${weekend.label})${freeCount ? `, ${freeCount} of them free` : ''} — storytimes, festivals, museums, farms and more. Updated daily on FamPass.`
+  : `Family-friendly events ${inMetro(metro)} — storytimes, festivals, museums, farms and more. Updated daily on FamPass.`;
+
+const jsonLd = buildEventJsonLd(shown.length ? shown : laterSample, metro, canonical);
+
+function eventUrl(e: PublicEvent): string | undefined {
+  return e.websiteURL || e.externalURL || undefined;
+}
+---
+<Base title={title} description={description} canonical={canonical}>
+  <Fragment set:html={`<script type="application/ld+json">${JSON.stringify(jsonLd)}</script>`} />
+
+  <section class="ttd-hero">
+    <div class="container container--narrow">
+      <span class="eyebrow">This weekend · {weekend.label}</span>
+      <h1 class="mt-4">Things to do with kids {inMetro(metro)} this weekend</h1>
+      <p class="lede mt-4">
+        {weekendTotal
+          ? `There are ${fmt(weekendTotal)} family-friendly ${weekendTotal === 1 ? 'event' : 'events'} happening ${inMetro(metro)} this weekend${freeCount ? ` — ${fmt(freeCount)} of them free` : ''}. Here's a handpicked sample. Get the free FamPass app to see them all, near you, filtered by your kids' ages, your budget, and how far you'll drive.`
+          : `Here's what's coming up for families ${inMetro(metro)}. Get the free FamPass app to see everything near you — filtered by age, price, and distance.`}
+      </p>
+      <div class="ttd-hero__cta mt-4">
+        <a href={APP_URL} class="app-store-badge" target="_blank" rel="noopener">
+          <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Download FamPass on the App Store" width="140" height="47" />
+        </a>
+        <a href={WEB_URL} class="ttd-weblink" target="_blank" rel="noopener">No iPhone? Use FamPass on the web →</a>
+      </div>
+    </div>
+  </section>
+
+  {days.map((d) => (
+    <section class="section ttd-day">
+      <div class="container container--narrow">
+        <h2 class="ttd-day__head">{formatDay(d)}</h2>
+        <ul class="ttd-list">
+          {sampleByDay.get(d)!.map((e) => (
+            <li class="ttd-card">
+              <div class="ttd-card__media">
+                <span class="ttd-ph" aria-hidden="true">{categoryEmoji(e.category)}</span>
+                {e.imageURL && (
+                  <img src={e.imageURL} alt={e.title} loading="lazy" width="120" height="120" onerror="this.style.display='none'" />
+                )}
+              </div>
+              <div class="ttd-card__body">
+                <div class="ttd-card__meta">
+                  {e.category && <span class="ttd-tag">{e.category}</span>}
+                  {priceLabel(e.price) && <span class={`ttd-price ${priceLabel(e.price) === 'Free' ? 'is-free' : ''}`}>{priceLabel(e.price)}</span>}
+                </div>
+                <h3 class="ttd-card__title">
+                  {eventUrl(e)
+                    ? <a href={eventUrl(e)} target="_blank" rel="noopener nofollow">{e.title}</a>
+                    : e.title}
+                </h3>
+                <p class="ttd-card__where">
+                  <span>{formatTime(e.startDate, e.isAllDay)}</span>
+                  {e.locationName && <span> · {e.locationName}</span>}
+                  {e.city && <span> · {e.city}</span>}
+                  {e.ageRange && <span> · Ages {e.ageRange}</span>}
+                </p>
+              </div>
+            </li>
+          ))}
+        </ul>
+        {byDay.get(d)!.length > SAMPLE_PER_DAY && (
+          <p class="ttd-day__more">+ {fmt(byDay.get(d)!.length - SAMPLE_PER_DAY)} more {formatDay(d).split(',')[0]} — <a href={APP_URL} target="_blank" rel="noopener">see them in the app</a></p>
+        )}
+      </div>
+    </section>
+  ))}
+
+  {/* The conversion moment: this was a taste — the app has everything. */}
+  {weekendTotal > 0 && (
+    <section class="ttd-sample">
+      <div class="container container--narrow">
+        <div class="ttd-sample__card">
+          <span class="ttd-sample__eyebrow">This is just a taste 👀</span>
+          <h2 class="ttd-sample__title">You're seeing {fmt(shown.length)} of {fmt(weekendTotal)} events this weekend {inMetro(metro)}.</h2>
+          <p class="ttd-sample__body">
+            The free <strong>FamPass</strong> app has all {fmt(weekendTotal)} this weekend — plus <strong>{fmt(moreBeyondWeekend)}+ more</strong> coming up — filtered by your kids' ages, your budget, and driving distance. Storytimes, festivals, museums, farms, plus local guides and deals, all in one place.
+          </p>
+          <div class="ttd-sample__actions">
+            <a href={APP_URL} class="app-store-badge" target="_blank" rel="noopener">
+              <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Download FamPass on the App Store" width="150" height="50" />
+            </a>
+            <a href={WEB_URL} class="ttd-webbtn" target="_blank" rel="noopener">Or open it on the web →</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  )}
+
+  {weekendTotal === 0 && laterSample.length > 0 && (
+    <section class="section ttd-day">
+      <div class="container container--narrow">
+        <h2 class="ttd-day__head">Coming up {inMetro(metro)}</h2>
+        <ul class="ttd-list">
+          {laterSample.map((e) => (
+            <li class="ttd-card">
+              <div class="ttd-card__media">
+                <span class="ttd-ph" aria-hidden="true">{categoryEmoji(e.category)}</span>
+                {e.imageURL && (
+                  <img src={e.imageURL} alt={e.title} loading="lazy" width="120" height="120" onerror="this.style.display='none'" />
+                )}
+              </div>
+              <div class="ttd-card__body">
+                <div class="ttd-card__meta">
+                  {e.category && <span class="ttd-tag">{e.category}</span>}
+                  {priceLabel(e.price) && <span class={`ttd-price ${priceLabel(e.price) === 'Free' ? 'is-free' : ''}`}>{priceLabel(e.price)}</span>}
+                </div>
+                <h3 class="ttd-card__title">
+                  {eventUrl(e) ? <a href={eventUrl(e)} target="_blank" rel="noopener nofollow">{e.title}</a> : e.title}
+                </h3>
+                <p class="ttd-card__where">
+                  <span>{formatDay(e.startDate)}</span>
+                  <span> · {formatTime(e.startDate, e.isAllDay)}</span>
+                  {e.city && <span> · {e.city}</span>}
+                </p>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )}
+
+  <CTAStrip
+    title={`Never run out of things to do ${inMetro(metro)}.`}
+    body="FamPass curates local family events, guides, and deals — updated daily, free to start. Weekend planning in less time than your morning coffee."
+  />
+</Base>
+
+<style>
+  .ttd-hero {
+    background: linear-gradient(180deg, var(--color-bg-warm) 0%, #fff 100%);
+    padding-block: clamp(56px, 7vw, 96px) clamp(28px, 4vw, 44px);
+  }
+  .ttd-hero h1 { max-width: 760px; letter-spacing: -0.02em; }
+  .ttd-hero .lede { max-width: 640px; }
+  .ttd-hero__cta { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+  .app-store-badge img { height: 47px; width: auto; display: block; }
+  .ttd-weblink { font-weight: 600; color: var(--color-ink); text-decoration: none; border-bottom: 2px solid var(--color-accent, #e64a4a); padding-bottom: 1px; }
+  .ttd-weblink:hover { color: var(--color-accent, #e64a4a); }
+
+  .ttd-day { padding-block: clamp(24px, 3.5vw, 40px); }
+  .ttd-day__head {
+    font-family: var(--font-serif);
+    font-size: clamp(1.3rem, 1.4vw + 1rem, 1.7rem);
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--color-line);
+  }
+  .ttd-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+  .ttd-card {
+    display: flex;
+    gap: 16px;
+    padding: 16px;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-lg, 16px);
+    background: #fff;
+    transition: border-color .15s ease, box-shadow .15s ease;
+  }
+  .ttd-card:hover { border-color: var(--color-ink); box-shadow: 0 6px 18px rgba(26,26,26,.06); }
+  .ttd-card__media { flex-shrink: 0; position: relative; width: 92px; height: 92px; }
+  .ttd-card__media img {
+    position: absolute; inset: 0; z-index: 1;
+    width: 92px; height: 92px; object-fit: cover; border-radius: 12px;
+  }
+  /* category-emoji tile shown when there's no image (or the image 404s and hides itself) */
+  .ttd-ph {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2rem; border-radius: 12px;
+    background: linear-gradient(140deg, var(--color-bg-warm) 0%, #f3ede6 100%);
+    border: 1px solid var(--color-line);
+  }
+  .ttd-card__body { min-width: 0; }
+  .ttd-card__meta { display: flex; gap: 8px; align-items: center; margin-bottom: 6px; flex-wrap: wrap; }
+  .ttd-tag {
+    font-size: .72rem; font-weight: 600; letter-spacing: .02em;
+    text-transform: uppercase; color: var(--color-accent, #e64a4a);
+    background: rgba(230,74,74,.08); padding: 3px 8px; border-radius: 999px;
+  }
+  .ttd-price { font-size: .82rem; font-weight: 600; color: var(--color-ink-soft, #555); }
+  .ttd-price.is-free { color: #128a4c; }
+  .ttd-card__title {
+    font-family: var(--font-serif);
+    font-size: 1.12rem; line-height: 1.3; margin: 0 0 4px;
+  }
+  .ttd-card__title a { color: inherit; text-decoration: none; }
+  .ttd-card__title a:hover { text-decoration: underline; }
+  .ttd-card__where { color: var(--color-ink-soft, #666); font-size: .92rem; margin: 0; }
+  .ttd-day__more { margin: 16px 0 0; font-size: .95rem; color: var(--color-ink-soft, #555); }
+  .ttd-day__more a { color: var(--color-accent, #e64a4a); font-weight: 600; }
+
+  /* Conversion band */
+  .ttd-sample { padding-block: clamp(40px, 5vw, 64px); }
+  .ttd-sample__card {
+    background: var(--color-ink);
+    color: #fff;
+    border-radius: var(--radius-xl, 24px);
+    padding: clamp(32px, 4vw, 56px);
+    text-align: center;
+  }
+  .ttd-sample__eyebrow {
+    display: inline-block;
+    font-size: .8rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase;
+    color: var(--color-accent-hi, #ff7a7a); margin-bottom: 14px;
+  }
+  .ttd-sample__title {
+    font-family: var(--font-serif); color: #fff;
+    font-size: clamp(1.5rem, 2.4vw + .5rem, 2.1rem); letter-spacing: -0.015em;
+    max-width: 640px; margin: 0 auto 14px;
+  }
+  .ttd-sample__body { color: rgba(255,255,255,.82); max-width: 620px; margin: 0 auto 24px; }
+  .ttd-sample__actions { display: flex; align-items: center; justify-content: center; gap: 20px; flex-wrap: wrap; }
+  .ttd-sample__card .app-store-badge img { height: 50px; display: block; }
+  .ttd-webbtn { color: #fff; font-weight: 600; text-decoration: none; border-bottom: 2px solid var(--color-accent-hi, #ff7a7a); padding-bottom: 2px; }
+  .ttd-webbtn:hover { color: var(--color-accent-hi, #ff7a7a); }
+
+  @media (max-width: 560px) {
+    .ttd-card__media { width: 68px; height: 68px; }
+    .ttd-card__media img { width: 68px; height: 68px; }
+    .ttd-ph { font-size: 1.6rem; }
+  }
+</style>
