@@ -1,5 +1,14 @@
 ---
 const year = new Date().getFullYear();
+
+// Active state for the current page. Normalize trailing slashes so `/resources/`
+// matches the `/resources` pathname (Vercel `cleanUrls` serves extensionless paths).
+const norm = (p: string) => p.replace(/\/+$/, '') || '/';
+const currentPath = norm(Astro.url.pathname);
+const isCurrent = (href: string) => {
+  if (!href || href.startsWith('http') || href.includes('#')) return false;
+  return norm(href) === currentPath;
+};
 ---
 <footer class="site-footer">
   <div class="container site-footer__top">
@@ -12,9 +21,19 @@ const year = new Date().getFullYear();
       <a href="https://apps.apple.com/us/app/fampass/id6760528354" class="app-store-badge" target="_blank" rel="noopener">
         <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Download on the App Store" />
       </a>
+      <a href="https://app.fampass.io/events" class="site-footer__browse" data-track="browse_footer">On Android or desktop? Use it in your browser →</a>
     </div>
 
     <div class="site-footer__cols">
+      <div>
+        <h5>Browse online</h5>
+        <ul>
+          <li><a href="https://app.fampass.io/events" data-track="footer_events">Events</a></li>
+          <li><a href="https://app.fampass.io/guides" data-track="footer_guides">Guides</a></li>
+          <li><a href="https://app.fampass.io/deals" data-track="footer_deals">Deals</a></li>
+          <li><a href="https://app.fampass.io" data-track="footer_open_web_app">Open web app</a></li>
+        </ul>
+      </div>
       <div>
         <h5>Product</h5>
         <ul>
@@ -27,17 +46,17 @@ const year = new Date().getFullYear();
       <div>
         <h5>Company</h5>
         <ul>
-          <li><a href="/about.html">About</a></li>
-          <li><a href="/resources/">Resources</a></li>
-          <li><a href="/support.html">Support</a></li>
-          <li><a href="/list-your-deal.html">For Businesses</a></li>
+          <li><a href="/about" class:list={[{ 'is-active': isCurrent('/about') }]} aria-current={isCurrent('/about') ? 'page' : undefined}>About</a></li>
+          <li><a href="/resources/" class:list={[{ 'is-active': isCurrent('/resources/') }]} aria-current={isCurrent('/resources/') ? 'page' : undefined}>Resources</a></li>
+          <li><a href="/support" class:list={[{ 'is-active': isCurrent('/support') }]} aria-current={isCurrent('/support') ? 'page' : undefined}>Support</a></li>
+          <li><a href="/list-your-deal" class:list={[{ 'is-active': isCurrent('/list-your-deal') }]} aria-current={isCurrent('/list-your-deal') ? 'page' : undefined}>For Businesses</a></li>
         </ul>
       </div>
       <div>
         <h5>Legal</h5>
         <ul>
-          <li><a href="/privacy-policy.html">Privacy</a></li>
-          <li><a href="/terms-of-service.html">Terms</a></li>
+          <li><a href="/privacy-policy" class:list={[{ 'is-active': isCurrent('/privacy-policy') }]} aria-current={isCurrent('/privacy-policy') ? 'page' : undefined}>Privacy</a></li>
+          <li><a href="/terms-of-service" class:list={[{ 'is-active': isCurrent('/terms-of-service') }]} aria-current={isCurrent('/terms-of-service') ? 'page' : undefined}>Terms</a></li>
         </ul>
       </div>
     </div>
@@ -77,10 +96,19 @@ const year = new Date().getFullYear();
     max-width: 320px;
     font-size: 0.98rem;
   }
+  .site-footer__browse {
+    display: inline-block;
+    margin-top: 16px;
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--color-accent);
+    transition: color .15s ease;
+  }
+  .site-footer__browse:hover { color: var(--color-accent-hi); text-decoration: underline; }
   .site-footer__cols {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 32px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 28px;
   }
   .site-footer__cols h5 {
     font-size: 0.78rem;
@@ -97,6 +125,7 @@ const year = new Date().getFullYear();
     transition: color .15s ease;
   }
   .site-footer__cols a:hover { color: var(--color-accent); }
+  .site-footer__cols a.is-active { color: var(--color-accent); font-weight: 600; }
 
   .site-footer__bottom {
     margin-top: 48px;

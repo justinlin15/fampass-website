@@ -14,11 +14,14 @@ const heroImg = 'https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=
       </p>
 
       <div class="hero__actions">
-        <a href="https://apps.apple.com/us/app/fampass/id6760528354" class="app-store-badge" target="_blank" rel="noopener" id="download">
+        <a href="https://apps.apple.com/us/app/fampass/id6760528354" class="app-store-badge" target="_blank" rel="noopener" id="download" data-track="app_store_hero">
           <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Download on the App Store" />
         </a>
         <a href="#how-it-works" class="btn btn--ghost">See how it works</a>
       </div>
+      <p class="hero__browse">
+        No iPhone? <a href="https://app.fampass.io/events" data-track="browse_hero">Use it in your browser →</a>
+      </p>
 
       <ul class="hero__proof">
         <li><strong>1,500+</strong> activities</li>
@@ -87,6 +90,18 @@ const heroImg = 'https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=
     align-items: center;
     flex-wrap: wrap;
   }
+
+  .hero__browse {
+    margin-top: 16px;
+    font-size: 0.92rem;
+    color: var(--color-ink-muted);
+  }
+  .hero__browse a {
+    color: var(--color-accent);
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .hero__browse a:hover { text-decoration: underline; }
 
   .hero__proof {
     margin-top: 36px;

@@ -1,11 +1,28 @@
 ---
+// Web-app destinations (browse the actual product without installing)
+const appLinks = [
+  { href: 'https://app.fampass.io/events', label: 'Events' },
+  { href: 'https://app.fampass.io/guides', label: 'Guides' },
+  { href: 'https://app.fampass.io/deals', label: 'Deals' },
+];
+// Marketing-site sections. `spy` marks links to homepage sections that get an
+// active state from scroll position (handled by JS); the rest match by path.
 const links = [
   { href: '/things-to-do/', label: 'Things to do' },
-  { href: '/#features', label: 'Features' },
-  { href: '/#how-it-works', label: 'How it works' },
-  { href: '/#pricing', label: 'Pricing' },
+  { href: '/#features', label: 'Features', spy: 'features' },
+  { href: '/#how-it-works', label: 'How it works', spy: 'how-it-works' },
+  { href: '/#pricing', label: 'Pricing', spy: 'pricing' },
   { href: '/resources/', label: 'Resources' },
 ];
+
+// Active state for the current page (path-based links only; hash/external links
+// never match here — homepage anchors are handled by scroll-spy at runtime).
+const currentPath = Astro.url.pathname.replace(/\/+$/, '') || '/';
+const isCurrent = (href: string) => {
+  if (!href || href.startsWith('http') || href.includes('#')) return false;
+  return (href.replace(/\/+$/, '') || '/') === currentPath;
+};
+const moreHasActive = links.some(l => isCurrent(l.href));
 ---
 <header class="site-header" id="site-header">
   <div class="container site-header__inner">
@@ -15,12 +32,33 @@ const links = [
     </a>
 
     <nav class="site-header__nav" aria-label="Primary">
-      {links.map(l => <a href={l.href}>{l.label}</a>)}
+      {appLinks.map(l => <a href={l.href} class="site-header__nav-app" data-track={`nav_${l.label.toLowerCase()}`}>{l.label}</a>)}
+      <span class="site-header__nav-sep" aria-hidden="true"></span>
+      <div class="site-header__more" data-dropdown>
+        <button type="button" class:list={['site-header__more-btn', { 'is-active': moreHasActive }]} aria-haspopup="true" aria-expanded="false">
+          More
+          <svg class="site-header__more-caret" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+            <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <div class="site-header__more-menu" role="menu">
+          {links.map(l => (
+            <a
+              href={l.href}
+              role="menuitem"
+              data-spy={l.spy}
+              class:list={[{ 'is-active': isCurrent(l.href) }]}
+              aria-current={isCurrent(l.href) ? 'page' : undefined}
+            >{l.label}</a>
+          ))}
+        </div>
+      </div>
     </nav>
 
     <div class="site-header__cta">
-      <a href="https://app.fampass.io" class="site-header__login">Log in</a>
-      <a href="https://apps.apple.com/us/app/fampass/id6760528354" target="_blank" rel="noopener" class="btn btn--primary btn--sm">Get the app</a>
+      <a href="https://app.fampass.io" class="site-header__login" data-webapp-link data-track="nav_open_web_app">Open web app</a>
+      <a href="https://apps.apple.com/us/app/fampass/id6760528354" target="_blank" rel="noopener" class="btn btn--primary btn--sm cta-app" data-track="get_the_app">Get the app</a>
+      <a href="https://app.fampass.io" class="btn btn--primary btn--sm cta-web" data-track="open_web_app_btn">Open web app</a>
     </div>
 
     <button class="site-header__toggle" aria-label="Open menu" aria-expanded="false" aria-controls="site-header-mobile">
@@ -32,9 +70,20 @@ const links = [
 
   <div class="site-header__mobile" id="site-header-mobile" hidden>
     <div class="container">
-      {links.map(l => <a href={l.href}>{l.label}</a>)}
-      <a href="https://app.fampass.io">Log in</a>
-      <a href="https://apps.apple.com/us/app/fampass/id6760528354" target="_blank" rel="noopener" class="btn btn--primary">Get the app</a>
+      <span class="site-header__mobile-label">Browse online</span>
+      {appLinks.map(l => <a href={l.href} data-track={`nav_${l.label.toLowerCase()}`}>{l.label}</a>)}
+      <span class="site-header__mobile-label">Learn more</span>
+      {links.map(l => (
+        <a
+          href={l.href}
+          data-spy={l.spy}
+          class:list={[{ 'is-active': isCurrent(l.href) }]}
+          aria-current={isCurrent(l.href) ? 'page' : undefined}
+        >{l.label}</a>
+      ))}
+      <a href="https://app.fampass.io" class="site-header__mobile-webapp" data-webapp-link data-track="nav_open_web_app">Open web app →</a>
+      <a href="https://apps.apple.com/us/app/fampass/id6760528354" target="_blank" rel="noopener" class="btn btn--primary cta-app" data-track="get_the_app">Get the app</a>
+      <a href="https://app.fampass.io" class="btn btn--primary cta-web" data-track="open_web_app_btn">Open web app</a>
     </div>
   </div>
 </header>
@@ -71,21 +120,112 @@ const links = [
 
   .site-header__nav {
     display: flex;
-    gap: 4px;
+    align-items: center;
+    gap: 2px;
     margin-left: auto;
   }
   .site-header__nav a {
-    padding: 8px 14px;
+    padding: 8px 12px;
     border-radius: var(--radius-pill);
     font-size: 0.95rem;
     font-weight: 500;
     color: var(--color-ink-soft);
+    white-space: nowrap;
     transition: background .15s ease, color .15s ease;
   }
   .site-header__nav a:hover {
     color: var(--color-ink);
     background: rgba(26,26,26,.05);
   }
+  .site-header__nav-app { color: var(--color-ink); font-weight: 600; }
+  .site-header__nav-app:hover { color: var(--color-accent); background: var(--color-accent-lo); }
+  .site-header__nav-sep {
+    width: 1px;
+    height: 20px;
+    margin-inline: 6px;
+    background: var(--color-line);
+  }
+
+  /* "More" dropdown */
+  .site-header__more { position: relative; }
+  .site-header__more-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 8px 12px;
+    border-radius: var(--radius-pill);
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--color-ink-soft);
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background .15s ease, color .15s ease;
+  }
+  .site-header__more:hover .site-header__more-btn,
+  .site-header__more:focus-within .site-header__more-btn {
+    color: var(--color-ink);
+    background: rgba(26,26,26,.05);
+  }
+  .site-header__more-caret { transition: transform .15s ease; }
+  .site-header__more:hover .site-header__more-caret,
+  .site-header__more:focus-within .site-header__more-caret { transform: rotate(180deg); }
+
+  .site-header__more-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    min-width: 200px;
+    margin-top: 8px;
+    padding: 6px;
+    background: #fff;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-md);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-6px);
+    pointer-events: none;
+    transition: opacity .15s ease, transform .15s ease, visibility .15s ease;
+  }
+  /* invisible bridge so hover survives the gap between button and menu */
+  .site-header__more-menu::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: 0;
+    right: 0;
+    height: 8px;
+  }
+  .site-header__more:hover .site-header__more-menu,
+  .site-header__more:focus-within .site-header__more-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+  .site-header__more-menu a {
+    margin-left: 0;
+    padding: 9px 12px;
+    border-radius: var(--radius-sm, 8px);
+    font-size: 0.92rem;
+    font-weight: 500;
+    color: var(--color-ink-soft);
+    white-space: nowrap;
+  }
+  .site-header__more-menu a:hover {
+    color: var(--color-ink);
+    background: rgba(26,26,26,.05);
+  }
+  /* active (current page / section) */
+  .site-header__more-menu a.is-active {
+    color: var(--color-accent);
+    background: var(--color-accent-lo);
+    font-weight: 600;
+  }
+  .site-header__more-btn.is-active { color: var(--color-accent); }
 
   .site-header__cta { display: inline-flex; align-items: center; gap: 10px; }
   .site-header__cta .btn {
@@ -124,6 +264,24 @@ const links = [
     margin-top: 8px;
     color: #fff;
   }
+  .site-header__mobile a.is-active {
+    color: var(--color-accent);
+    background: var(--color-accent-lo);
+    font-weight: 600;
+  }
+  .site-header__mobile-label {
+    padding: 12px 14px 4px;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-weight: 600;
+    color: var(--color-ink-muted);
+  }
+  .site-header__mobile-webapp {
+    margin-top: 8px;
+    color: var(--color-accent) !important;
+    font-weight: 600 !important;
+  }
 
   @media (max-width: 820px) {
     .site-header__nav, .site-header__cta { display: none; }
@@ -145,5 +303,55 @@ const links = [
       btn.setAttribute('aria-expanded', 'false');
       panel.hidden = true;
     }));
+  })();
+
+  // "More" dropdown(s): open on hover/focus via CSS; JS only keeps aria-expanded
+  // in sync and closes on Escape. Works for mouse, keyboard, and touch (tap =
+  // focus, which triggers :focus-within).
+  (() => {
+    document.querySelectorAll('[data-dropdown]').forEach(dd => {
+      const trigger = dd.querySelector('.site-header__more-btn');
+      if (!trigger) return;
+      const sync = open => trigger.setAttribute('aria-expanded', String(open));
+      dd.addEventListener('mouseenter', () => sync(true));
+      dd.addEventListener('mouseleave', () => { if (!dd.contains(document.activeElement)) sync(false); });
+      dd.addEventListener('focusin', () => sync(true));
+      dd.addEventListener('focusout', e => { if (!dd.contains(e.relatedTarget)) sync(false); });
+      dd.addEventListener('keydown', e => { if (e.key === 'Escape') { sync(false); trigger.blur(); } });
+    });
+  })();
+
+  // Scroll-spy: highlight the nav link (and the "More" trigger) for whichever
+  // homepage section is currently in view. No-ops on pages without those sections
+  // — path-based active states rendered server-side are left untouched there.
+  (() => {
+    const spyLinks = [...document.querySelectorAll('[data-spy]')];
+    if (!spyLinks.length) return;
+    const ids = [...new Set(spyLinks.map(a => a.dataset.spy))];
+    const sections = ids.map(id => document.getElementById(id)).filter(Boolean);
+    if (!sections.length) return;
+    const moreBtns = [...document.querySelectorAll('.site-header__more-btn')];
+    const visible = new Set();
+    let current;
+    const apply = id => {
+      if (id === current) return;
+      current = id;
+      spyLinks.forEach(a => {
+        const on = !!id && a.dataset.spy === id;
+        a.classList.toggle('is-active', on);
+        if (on) a.setAttribute('aria-current', 'location');
+        else a.removeAttribute('aria-current');
+      });
+      moreBtns.forEach(b => b.classList.toggle('is-active', !!id));
+    };
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) visible.add(e.target.id);
+        else visible.delete(e.target.id);
+      });
+      const active = sections.find(s => visible.has(s.id));
+      apply(active ? active.id : null);
+    }, { rootMargin: '-40% 0px -50% 0px', threshold: 0 });
+    sections.forEach(s => io.observe(s));
   })();
 </script>
