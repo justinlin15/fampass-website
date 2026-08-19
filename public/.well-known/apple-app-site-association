@@ -1,0 +1,28 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["KBRZ5K8GB2.com.iw.ParentGuide"],
+        "components": [
+          {
+            "/": "/auth/tiktok/*",
+            "exclude": true,
+            "comment": "TikTok OAuth exchange must complete in the browser, not the app"
+          },
+          {
+            "/": "/admin*",
+            "exclude": true,
+            "comment": "Admin panel is a desktop web tool, not an app screen"
+          },
+          {
+            "/": "/.well-known/*",
+            "exclude": true
+          },
+          {
+            "/": "/*"
+          }
+        ]
+      }
+    ]
+  }
+}
