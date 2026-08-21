@@ -70,8 +70,9 @@ const {
     <Analytics />
   </head>
   <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
     <Header />
-    <main>
+    <main id="main-content">
       <slot />
     </main>
     {newsletterStrip && <NewsletterSignup variant="compact" />}
