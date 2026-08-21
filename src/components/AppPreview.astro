@@ -11,7 +11,11 @@ const events = [
 <section class="preview section section--ink">
   <div class="container">
     <div class="section__head">
-      <span class="eyebrow">A peek inside</span>
+      <!-- Override the shared .eyebrow color: this section sits on the dark
+           section--ink background, where --color-accent-hi (the global fix
+           for white/light backgrounds) actually fails contrast (3.44:1) —
+           the original lighter --color-accent passes here instead (4.51:1). -->
+      <span class="eyebrow" style="color: var(--color-accent);">A peek inside</span>
       <h2>What's inside the feed.</h2>
       <p>A small sample of the kinds of activities you'll find in the app.</p>
     </div>
@@ -78,7 +82,7 @@ const events = [
     font-size: 22px;
   }
   .event-card__tag {
-    background: var(--color-accent);
+    background: var(--color-accent-hi);
     color: #fff;
     font-size: 0.78rem;
     font-weight: 600;

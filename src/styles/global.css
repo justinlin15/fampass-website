@@ -13,6 +13,11 @@
   --color-bg-deeper:  #F4EEE3;
   --color-accent:     #E64A4A;
   --color-accent-hi:  #C93A3A;
+  /* Darker hover shade for text/buttons that sit on --color-accent-hi at
+     rest (WCAG AA contrast fix, 2026-08) — --color-accent itself is only
+     3.86:1 on white, which fails the 4.5:1 text threshold, so accent-hi
+     (5.06:1) is the text/button color now; this is its hover state. */
+  --color-accent-active: #A42F2F;
   --color-accent-lo:  #FBE3E3;
   --color-success:    #2F9E64;
 
@@ -97,7 +102,7 @@ p { color: var(--color-ink-soft); }
   font-weight: 600;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--color-accent);
+  color: var(--color-accent-hi);
 }
 .eyebrow::before {
   content: '';
@@ -162,11 +167,11 @@ p { color: var(--color-ink-soft); }
 .btn--primary:hover { background: #000; box-shadow: 0 8px 20px rgba(26,26,26,.24); }
 
 .btn--accent {
-  background: var(--color-accent);
+  background: var(--color-accent-hi);
   color: #fff;
   box-shadow: 0 4px 14px rgba(230,74,74,.30);
 }
-.btn--accent:hover { background: var(--color-accent-hi); box-shadow: 0 8px 20px rgba(230,74,74,.40); }
+.btn--accent:hover { background: var(--color-accent-active); box-shadow: 0 8px 20px rgba(230,74,74,.40); }
 
 .btn--ghost {
   background: transparent;
@@ -263,13 +268,13 @@ html.is-not-ios [data-webapp-link] { display: none; }
 .prose p { color: var(--color-ink-soft); }
 .prose strong { color: var(--color-ink); font-weight: 600; }
 .prose a {
-  color: var(--color-accent);
+  color: var(--color-accent-hi);
   text-decoration: underline;
   text-decoration-thickness: 1.5px;
   text-underline-offset: 3px;
   transition: color .15s ease;
 }
-.prose a:hover { color: var(--color-accent-hi); }
+.prose a:hover { color: var(--color-accent-active); }
 .prose ul, .prose ol {
   padding-left: 1.4em;
   margin-block: 1.1em;

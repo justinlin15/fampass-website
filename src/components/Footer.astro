@@ -101,10 +101,10 @@ const isCurrent = (href: string) => {
     margin-top: 16px;
     font-size: 0.92rem;
     font-weight: 600;
-    color: var(--color-accent);
+    color: var(--color-accent-hi);
     transition: color .15s ease;
   }
-  .site-footer__browse:hover { color: var(--color-accent-hi); text-decoration: underline; }
+  .site-footer__browse:hover { color: var(--color-accent-active); text-decoration: underline; }
   .site-footer__cols {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -124,8 +124,8 @@ const isCurrent = (href: string) => {
     font-size: 0.95rem;
     transition: color .15s ease;
   }
-  .site-footer__cols a:hover { color: var(--color-accent); }
-  .site-footer__cols a.is-active { color: var(--color-accent); font-weight: 600; }
+  .site-footer__cols a:hover { color: var(--color-accent-hi); }
+  .site-footer__cols a.is-active { color: var(--color-accent-hi); font-weight: 600; }
 
   .site-footer__bottom {
     margin-top: 48px;
